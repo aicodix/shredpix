@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">Shredpix</string>
+    <string name="sample_rate">Sample Rate</string>
+    <string name="rate_8000">8000 Hz</string>
+    <string name="rate_44100">44100 Hz</string>
+    <string name="rate_48000">48000 Hz</string>
+    <string name="night_mode">Night Mode</string>
+    <string name="enable">Enable</string>
+    <string name="disable">Disable</string>
+    <string name="force_quit">Force Quit</string>
+    <string name="quit">Quit</string>
+    <string name="image_description">Image to encode</string>
+    <string name="encode">Encode</string>
+    <string name="carrier">Carrier:</string>
+    <string name="mode">Mode:</string>
+    <string name="call">Call:</string>
+    <string name="call_hint">Your call sign here</string>
+    <string name="image_type">Type:</string>
+    <string-array name="image_types">
+        <item>JPEG</item>
+        <item>PNG</item>
+        <item>WebP</item>
+    </string-array>
+    <string name="compression_method">Method:</string>
+    <string name="lossy_compression">lossy</string>
+    <string name="lossless_compression">lossless</string>
+    <string name="image_size">Size:</string>
+    <string-array name="pixel_count">
+        <item>1M</item>
+        <item>512K</item>
+        <item>256K</item>
+        <item>128K</item>
+        <item>64K</item>
+        <item>32K</item>
+        <item>16K</item>
+    </string-array>
+    <string-array name="operation_modes">
+        <item>6 (8PSK, 2700 Hz, 10 s)</item>
+        <item>7 (8PSK, 2500 Hz, 11 s)</item>
+        <item>8 (QPSK, 2500 Hz, 16 s)</item>
+        <item>9 (QPSK, 2250 Hz, 18 s)</item>
+        <item>10 (8PSK, 3200 Hz, 9 s)</item>
+        <item>11 (8PSK, 2400 Hz, 11 s)</item>
+        <item>12 (QPSK, 2400 Hz, 16 s)</item>
+        <item>13 (QPSK, 1600 Hz, 24 s)</item>
+    </string-array>
+    <string name="about">About Shredpix</string>
+    <string name="about_text">Shredpix - Encoder for COFDMTV\nCopyright 2021 aicodix GmbH
+\n\nPlease read the disclaimer at the bottom of this page.
+\n\nShredpix converts images to COFDMTV encoded audio signals and is based on open-source software:
+\n\nOFDM modem encoder and specification:\nhttps://github.com/aicodix/modem\nBSD Zero Clause License
+\n\nPolar and BCH codes:\nhttps://github.com/aicodix/code\nBSD Zero Clause License
+\n\nFast Fourier Transform:\nhttps://github.com/aicodix/dsp\nBSD Zero Clause License
+\n\nLauncher icon:\nhttp://tango.freedesktop.org/Tango_Desktop_Project\nPublic Domain
+\n\nDISCLAIMER:\nTHE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</string>
+</resources>

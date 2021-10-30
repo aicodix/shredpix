@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.aicodix.encofdmtv.MainActivity">
+    <item android:title="@string/sample_rate"><menu>
+        <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/action_set_rate_8000"
+                android:title="@string/rate_8000" />
+            <item
+                android:id="@+id/action_set_rate_44100"
+                android:title="@string/rate_44100" />
+            <item
+                android:id="@+id/action_set_rate_48000"
+                android:title="@string/rate_48000" />
+        </group></menu></item>
+    <item android:title="@string/night_mode"><menu>
+        <item
+            android:id="@+id/action_enable_night_mode"
+            android:title="@string/enable" />
+        <item
+            android:id="@+id/action_disable_night_mode"
+            android:title="@string/disable" />
+    </menu></item>
+    <item android:title="@string/force_quit"><menu>
+        <item
+            android:id="@+id/action_force_quit"
+            android:title="@string/quit" />
+    </menu></item>
+    <item android:id="@+id/action_about" android:title="@string/about" />
+</menu>

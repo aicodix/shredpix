@@ -43,17 +43,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"/>
-                <TextView
+                <CheckBox
+                    android:id="@+id/lossy"
+                    android:text="@string/lossy_compression"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/compression_method"/>
-                <ToggleButton
-                    android:id="@+id/lossy"
-                    android:textOn="@string/lossy_compression"
-                    android:textOff="@string/lossless_compression"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_gravity="center"/>
                 <Space
                     android:layout_width="0dp"

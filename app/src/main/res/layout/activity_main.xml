@@ -124,13 +124,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="5"
                 android:orientation="horizontal">
-                <ImageButton
-                    android:id="@+id/encode"
-                    android:src="@android:drawable/ic_menu_send"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/encode"/>
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"

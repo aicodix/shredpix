@@ -398,21 +398,6 @@ public class MainActivity extends AppCompatActivity {
 		return Arrays.copyOf(callSign.getBytes(StandardCharsets.US_ASCII), callSign.length() + 1);
 	}
 
-	private final View.OnClickListener encodeListener = new View.OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			if (audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
-				audioTrack.stop();
-				doneSending();
-			} else {
-				busySending();
-				configureEncoder(payload, callTerm(), operationMode, carrierFrequency);
-				audioTrack.write(new short[bufferSize], 0, bufferSize);
-				audioTrack.play();
-			}
-		}
-	};
-
 	private void setInputType(ViewGroup np, int it) {
 		int count = np.getChildCount();
 		for (int i = 0; i < count; i++) {
@@ -582,9 +567,9 @@ public class MainActivity extends AppCompatActivity {
 		binding.mode.setEnabled(true);
 		binding.carrier.setEnabled(true);
 		binding.call.setEnabled(true);
-		binding.encode.setEnabled(okay);
+		menu.findItem(R.id.action_encode).setEnabled(okay);
 		updateCompressionMethodButton(false);
-		binding.encode.setImageResource(okay ? android.R.drawable.ic_menu_send : android.R.drawable.ic_popup_disk_full);
+		menu.findItem(R.id.action_encode).setIcon(okay ? android.R.drawable.ic_menu_send : android.R.drawable.ic_popup_disk_full);
 	}
 
 	private void busyRecoding() {
@@ -593,9 +578,9 @@ public class MainActivity extends AppCompatActivity {
 		binding.mode.setEnabled(false);
 		binding.carrier.setEnabled(false);
 		binding.call.setEnabled(false);
-		binding.encode.setEnabled(false);
+		menu.findItem(R.id.action_encode).setEnabled(false);
 		binding.lossy.setEnabled(false);
-		binding.encode.setImageResource(android.R.drawable.ic_popup_sync);
+		menu.findItem(R.id.action_encode).setIcon(android.R.drawable.ic_popup_sync);
 	}
 
 	private void busySending() {
@@ -605,11 +590,11 @@ public class MainActivity extends AppCompatActivity {
 		binding.carrier.setEnabled(false);
 		binding.call.setEnabled(false);
 		binding.lossy.setEnabled(false);
-		binding.encode.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+		menu.findItem(R.id.action_encode).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 	}
 
 	private void doneSending() {
-		binding.encode.setEnabled(false);
+		menu.findItem(R.id.action_encode).setEnabled(false);
 		handler.postDelayed(() -> {
 			binding.format.setEnabled(doRecode);
 			binding.pixels.setEnabled(doRecode);
@@ -617,8 +602,8 @@ public class MainActivity extends AppCompatActivity {
 			binding.carrier.setEnabled(true);
 			binding.call.setEnabled(true);
 			updateCompressionMethodButton(false);
-			binding.encode.setImageResource(android.R.drawable.ic_menu_send);
-			binding.encode.setEnabled(true);
+			menu.findItem(R.id.action_encode).setIcon(android.R.drawable.ic_menu_send);
+			menu.findItem(R.id.action_encode).setEnabled(true);
 		}, 1000);
 	}
 
@@ -718,8 +703,6 @@ public class MainActivity extends AppCompatActivity {
 
 		binding.call.setText(callSign);
 		binding.call.addTextChangedListener(callListener);
-
-		binding.encode.setOnClickListener(encodeListener);
 
 		updateCompressionMethodButton(false);
 
@@ -836,6 +819,17 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
+		if (id == R.id.action_encode) {
+			if (audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
+				audioTrack.stop();
+				doneSending();
+			} else {
+				busySending();
+				configureEncoder(payload, callTerm(), operationMode, carrierFrequency);
+				audioTrack.write(new short[bufferSize], 0, bufferSize);
+				audioTrack.play();
+			}
+		}
 		if (id == R.id.action_set_rate_8000) {
 			setSampleRate(8000);
 			return true;

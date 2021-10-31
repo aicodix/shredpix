@@ -798,7 +798,7 @@ public class MainActivity extends AppCompatActivity {
 				if (formatChanged)
 					lossyCompression = true;
 				binding.lossy.setChecked(lossyCompression);
-				binding.lossy.setEnabled(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
+				binding.lossy.setEnabled(doRecode && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
 				break;
 		}
 		binding.lossy.setOnCheckedChangeListener(lossyListener);

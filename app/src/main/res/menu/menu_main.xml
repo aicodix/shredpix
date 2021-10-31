@@ -5,6 +5,7 @@
     <item android:title="@string/encode"
         android:id="@+id/action_encode"
         android:icon="@android:drawable/ic_menu_send"
+        app:iconTint="@color/tint"
         app:showAsAction="always" />
     <item android:title="@string/sample_rate"><menu>
         <group android:checkableBehavior="single">

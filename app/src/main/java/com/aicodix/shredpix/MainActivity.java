@@ -730,10 +730,6 @@ public class MainActivity extends AppCompatActivity {
 		sourceBitmap.setHasAlpha(false);
 		binding.image.setImageBitmap(sourceBitmap);
 		handler = new Handler(getMainLooper());
-		if (doRecode) {
-			busyRecoding();
-			handler.postDelayed(finishCreate, 1000);
-		}
 	}
 
 	private final Runnable finishCreate = new Runnable() {
@@ -813,6 +809,10 @@ public class MainActivity extends AppCompatActivity {
 		getMenuInflater().inflate(R.menu.menu_main, menu);
 		this.menu = menu;
 		updateSampleRateMenu();
+		if (doRecode) {
+			busyRecoding();
+			handler.postDelayed(finishCreate, 1000);
+		}
 		return true;
 	}
 

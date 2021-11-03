@@ -24,7 +24,7 @@ struct ImprovePAPR {
 		for (int i = size / 2; i < fact * size - size / 2; ++i)
 			over[i] = 0;
 		for (int i = size / 2; i < size; ++i)
-			over[size * 3 + i] = freq[i];
+			over[size * (fact - 1) + i] = freq[i];
 		bwd(temp, over);
 		value factor = 1 / std::sqrt(value(fact * size));
 		for (int i = 0; i < fact * size; ++i)
@@ -40,7 +40,7 @@ struct ImprovePAPR {
 				freq[i] = factor * over[i];
 		for (int i = size / 2; i < size; ++i)
 			if (used[i])
-				freq[i] = factor * over[size * 3 + i];
+				freq[i] = factor * over[size * (fact - 1) + i];
 	}
 };
 

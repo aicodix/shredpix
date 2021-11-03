@@ -147,7 +147,7 @@ class Encoder : public Interface {
 	}
 
 	void transform(bool papr_reduction = true) {
-		if (papr_reduction)
+		if (papr_reduction && RATE == 8000)
 			improve_papr(freq);
 		bwd(temp, freq);
 		for (int i = 0; i < symbol_length; ++i)

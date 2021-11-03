@@ -8,6 +8,7 @@ Copyright 2021 Ahmet Inan <inan@aicodix.de>
 
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 #include "bose_chaudhuri_hocquenghem_encoder.hh"
 #include "xorshift.hh"
 #include "complex.hh"
@@ -239,12 +240,12 @@ public:
 			float x = i / float(guard_length - 1);
 			float y = 0.5f * (1 - std::cos(DSP::Const<float>::Pi() * x));
 			float sum = DSP::lerp(guard[i], temp[i + symbol_length - guard_length].real(), y);
-			audio_buffer[i] = std::nearbyint(32767 * sum);
+			audio_buffer[i] = std::clamp<float>(std::nearbyint(32767 * sum), -32768, 32767);
 		}
 		for (int i = 0; i < guard_length; ++i)
 			guard[i] = temp[i].real();
 		for (int i = 0; i < symbol_length; ++i)
-			audio_buffer[i + guard_length] = std::nearbyint(32767 * temp[i].real());
+			audio_buffer[i + guard_length] = std::clamp<float>(std::nearbyint(32767 * temp[i].real()), -32768, 32767);
 		return true;
 	}
 

@@ -647,7 +647,7 @@ public class MainActivity extends AppCompatActivity {
 	@SuppressLint("ResourceType")
 	@Override
 	protected void onCreate(Bundle state) {
-		final int defaultSampleRate = 44100;
+		final int defaultSampleRate = 8000;
 		final int defaultOperationMode = 11;
 		final int defaultCarrierFrequency = 1850;
 		final String defaultCallSign = "ANONYMOUS";

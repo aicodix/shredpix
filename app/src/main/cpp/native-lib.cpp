@@ -30,7 +30,7 @@ Java_com_aicodix_shredpix_MainActivity_createEncoder(
 		default:
 			encoder = nullptr;
 	}
-	return !!encoder;
+	return encoder != nullptr;
 }
 
 extern "C" JNIEXPORT void JNICALL

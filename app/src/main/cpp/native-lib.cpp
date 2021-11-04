@@ -45,6 +45,10 @@ Java_com_aicodix_shredpix_MainActivity_produceEncoder(
 	JNIEnv *env,
 	jobject,
 	jshortArray JNI_audioBuffer) {
+
+	if (!encoder)
+		return false;
+
 	jshort *audioBuffer = env->GetShortArrayElements(JNI_audioBuffer, nullptr);
 	jboolean okay = false;
 	if (audioBuffer)

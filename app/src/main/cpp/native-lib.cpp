@@ -9,13 +9,13 @@ Copyright 2021 Ahmet Inan <inan@aicodix.de>
 
 static Interface *encoder;
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" JNIEXPORT jboolean JNICALL
 Java_com_aicodix_shredpix_MainActivity_createEncoder(
 	JNIEnv *,
 	jobject,
 	jint sampleRate) {
 	if (encoder && encoder->rate() == sampleRate)
-		return;
+		return true;
 	delete encoder;
 	switch (sampleRate) {
 		case 8000:
@@ -30,6 +30,7 @@ Java_com_aicodix_shredpix_MainActivity_createEncoder(
 		default:
 			encoder = nullptr;
 	}
+	return !!encoder;
 }
 
 extern "C" JNIEXPORT void JNICALL

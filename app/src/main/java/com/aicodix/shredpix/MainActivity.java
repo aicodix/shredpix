@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 	private Handler handler;
 	private Menu menu;
 
-	private native void createEncoder(int sampleRate);
+	private native boolean createEncoder(int sampleRate);
 
 	private native void configureEncoder(byte[] payload, byte[] callSign, int operationMode, int carrierFrequency);
 
@@ -122,9 +122,10 @@ public class MainActivity extends AppCompatActivity {
 		int extendedLength = symbolLength + guardLength;
 		audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig, audioFormat, sampleSize * bufferSize, AudioTrack.MODE_STREAM);
 		audioBuffer = new short[extendedLength];
-		createEncoder(sampleRate);
-		audioTrack.setPlaybackPositionUpdateListener(audioListener);
-		audioTrack.setPositionNotificationPeriod(extendedLength);
+		if (createEncoder(sampleRate)) {
+			audioTrack.setPlaybackPositionUpdateListener(audioListener);
+			audioTrack.setPositionNotificationPeriod(extendedLength);
+		}
 	}
 
 	private InputStream openStream(Intent intent) {

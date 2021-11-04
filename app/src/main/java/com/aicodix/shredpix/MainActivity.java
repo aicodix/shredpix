@@ -73,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
 	private short[] audioBuffer;
 	private byte[] payload;
 	private boolean doRecode;
+	private boolean encoderOkay;
+	private boolean payloadOkay;
 	private int orientation;
 	private Bitmap sourceBitmap;
 	private Bitmap resizedBitmap;
@@ -122,10 +124,19 @@ public class MainActivity extends AppCompatActivity {
 		int extendedLength = symbolLength + guardLength;
 		audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig, audioFormat, sampleSize * bufferSize, AudioTrack.MODE_STREAM);
 		audioBuffer = new short[extendedLength];
-		if (createEncoder(sampleRate)) {
-			audioTrack.setPlaybackPositionUpdateListener(audioListener);
-			audioTrack.setPositionNotificationPeriod(extendedLength);
-		}
+		audioTrack.setPlaybackPositionUpdateListener(audioListener);
+		audioTrack.setPositionNotificationPeriod(extendedLength);
+	}
+
+	private void initEncoder() {
+		encoderOkay = createEncoder(sampleRate);
+		int icon = android.R.drawable.ic_menu_send;
+		if (!payloadOkay)
+			icon = android.R.drawable.ic_popup_disk_full;
+		if (!encoderOkay)
+			icon = android.R.drawable.ic_dialog_alert;
+		menu.findItem(R.id.action_encode).setIcon(icon);
+		menu.findItem(R.id.action_encode).setEnabled(payloadOkay && encoderOkay);
 	}
 
 	private InputStream openStream(Intent intent) {
@@ -433,7 +444,7 @@ public class MainActivity extends AppCompatActivity {
 	private final Runnable finishFormat = new Runnable() {
 		@Override
 		public void run() {
-			boolean okay = false;
+			payloadOkay = false;
 			if (resizedBitmap != null) {
 				payload = encodeBitmap(resizedBitmap);
 				if (payload != null) {
@@ -441,11 +452,11 @@ public class MainActivity extends AppCompatActivity {
 					if (bitmap != null) {
 						bitmap.setHasAlpha(false);
 						binding.image.setImageBitmap(bitmap);
-						okay = payload.length <= payloadSize;
+						payloadOkay = payload.length <= payloadSize;
 					}
 				}
 			}
-			doneRecoding(okay);
+			doneRecoding();
 		}
 	};
 
@@ -481,7 +492,7 @@ public class MainActivity extends AppCompatActivity {
 		@Override
 		public void run() {
 			resizedBitmap = resizeBitmap(sourceBitmap);
-			boolean okay = false;
+			payloadOkay = false;
 			if (resizedBitmap != null) {
 				resizedBitmap.setHasAlpha(false);
 				binding.image.setImageBitmap(resizedBitmap);
@@ -491,11 +502,11 @@ public class MainActivity extends AppCompatActivity {
 					if (bitmap != null) {
 						bitmap.setHasAlpha(false);
 						binding.image.setImageBitmap(bitmap);
-						okay = payload.length <= payloadSize;
+						payloadOkay = payload.length <= payloadSize;
 					}
 				}
 			}
-			doneRecoding(okay);
+			doneRecoding();
 		}
 	};
 
@@ -562,15 +573,20 @@ public class MainActivity extends AppCompatActivity {
 		}
 	};
 
-	private void doneRecoding(boolean okay) {
+	private void doneRecoding() {
 		binding.format.setEnabled(true);
 		binding.pixels.setEnabled(true);
 		binding.mode.setEnabled(true);
 		binding.carrier.setEnabled(true);
 		binding.call.setEnabled(true);
-		menu.findItem(R.id.action_encode).setEnabled(okay);
 		updateCompressionMethodButton(false);
-		menu.findItem(R.id.action_encode).setIcon(okay ? android.R.drawable.ic_menu_send : android.R.drawable.ic_popup_disk_full);
+		int icon = android.R.drawable.ic_menu_send;
+		if (!payloadOkay)
+			icon = android.R.drawable.ic_popup_disk_full;
+		if (!encoderOkay)
+			icon = android.R.drawable.ic_dialog_alert;
+		menu.findItem(R.id.action_encode).setIcon(icon);
+		menu.findItem(R.id.action_encode).setEnabled(payloadOkay && encoderOkay);
 	}
 
 	private void busyRecoding() {
@@ -579,9 +595,9 @@ public class MainActivity extends AppCompatActivity {
 		binding.mode.setEnabled(false);
 		binding.carrier.setEnabled(false);
 		binding.call.setEnabled(false);
-		menu.findItem(R.id.action_encode).setEnabled(false);
 		binding.lossy.setEnabled(false);
 		menu.findItem(R.id.action_encode).setIcon(android.R.drawable.ic_popup_sync);
+		menu.findItem(R.id.action_encode).setEnabled(false);
 	}
 
 	private void busySending() {
@@ -616,6 +632,7 @@ public class MainActivity extends AppCompatActivity {
 		else
 			binding.lossy.setEnabled(false);
 		doRecode = enable;
+		payloadOkay = !enable;
 	}
 
 	@Override
@@ -737,7 +754,7 @@ public class MainActivity extends AppCompatActivity {
 		@Override
 		public void run() {
 			resizedBitmap = resizeBitmap(sourceBitmap);
-			boolean okay = false;
+			payloadOkay = false;
 			if (resizedBitmap != null) {
 				resizedBitmap.setHasAlpha(false);
 				binding.image.setImageBitmap(resizedBitmap);
@@ -747,11 +764,11 @@ public class MainActivity extends AppCompatActivity {
 					if (bitmap != null) {
 						bitmap.setHasAlpha(false);
 						binding.image.setImageBitmap(bitmap);
-						okay = payload.length <= payloadSize;
+						payloadOkay = payload.length <= payloadSize;
 					}
 				}
 			}
-			doneRecoding(okay);
+			doneRecoding();
 		}
 	};
 
@@ -764,6 +781,7 @@ public class MainActivity extends AppCompatActivity {
 		updateSampleRateMenu();
 		updateCarriers();
 		initAudioTrack();
+		initEncoder();
 	}
 
 	private void updateSampleRateMenu() {
@@ -809,6 +827,7 @@ public class MainActivity extends AppCompatActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_main, menu);
 		this.menu = menu;
+		initEncoder();
 		updateSampleRateMenu();
 		if (doRecode) {
 			busyRecoding();

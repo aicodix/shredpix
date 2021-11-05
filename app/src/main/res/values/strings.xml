@@ -43,7 +43,7 @@
         <item>13 (QPSK, 1600 Hz, 24 s)</item>
     </string-array>
     <string name="about">About Shredpix</string>
-    <string name="about_text">Shredpix - Encoder for COFDMTV\nCopyright 2021 aicodix GmbH
+    <string name="about_text">Shredpix %1$s\nCopyright 2021 aicodix GmbH
 \n\nPlease read the disclaimer at the bottom of this page.
 \n\nShredpix converts images to COFDMTV encoded audio signals and is based on open-source software:
 \n\nOFDM modem encoder and specification:\nhttps://github.com/aicodix/modem\nBSD Zero Clause License

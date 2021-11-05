@@ -558,6 +558,7 @@ public class MainActivity extends AppCompatActivity {
 		binding.carrier.setMaxValue((sampleRate / 2 - bandWidth) / 50);
 		binding.carrier.setValue((carrierFrequency - bandWidth / 2) / 50);
 		binding.carrier.setDisplayedValues(carrierValues());
+		setInputType(binding.carrier, InputType.TYPE_CLASS_NUMBER);
 	}
 
 	private final AdapterView.OnItemSelectedListener modeListener = new AdapterView.OnItemSelectedListener() {
@@ -717,7 +718,6 @@ public class MainActivity extends AppCompatActivity {
 		binding.carrier.setMinValue(0);
 		updateCarriers();
 		binding.carrier.setOnValueChangedListener((numberPicker, oldVal, newVal) -> carrierFrequency = newVal * 50 + bandWidth / 2);
-		setInputType(binding.carrier, InputType.TYPE_CLASS_NUMBER);
 
 		binding.call.setText(callSign);
 		binding.call.addTextChangedListener(callListener);

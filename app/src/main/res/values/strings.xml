@@ -4,6 +4,10 @@
     <string name="rate_8000">8000 Hz</string>
     <string name="rate_44100">44100 Hz</string>
     <string name="rate_48000">48000 Hz</string>
+    <string name="channel_select">Channel Select</string>
+    <string name="channel_default">Default</string>
+    <string name="channel_first">First</string>
+    <string name="channel_second">Second</string>
     <string name="night_mode">Night Mode</string>
     <string name="enable">Enable</string>
     <string name="disable">Disable</string>

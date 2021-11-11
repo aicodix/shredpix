@@ -19,6 +19,18 @@
                 android:id="@+id/action_set_rate_48000"
                 android:title="@string/rate_48000" />
         </group></menu></item>
+    <item android:title="@string/channel_select"><menu>
+        <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/action_set_channel_default"
+                android:title="@string/channel_default" />
+            <item
+                android:id="@+id/action_set_channel_first"
+                android:title="@string/channel_first" />
+            <item
+                android:id="@+id/action_set_channel_second"
+                android:title="@string/channel_second" />
+        </group></menu></item>
     <item android:title="@string/night_mode"><menu>
         <item
             android:id="@+id/action_enable_night_mode"

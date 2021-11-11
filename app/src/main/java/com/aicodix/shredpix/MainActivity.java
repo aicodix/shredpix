@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 	private final int payloadSize = 5380;
 	private boolean lossyCompression;
 	private int sampleRate;
+	private int channelSelect;
 	private int operationMode;
 	private int carrierFrequency;
 	private int bandWidth;
@@ -112,14 +113,21 @@ public class MainActivity extends AppCompatActivity {
 	private void initAudioTrack() {
 		if (audioTrack != null) {
 			boolean rateChanged = audioTrack.getSampleRate() != sampleRate;
-			if (!rateChanged)
+			boolean channelChanged = channelSelect == 0 ? audioTrack.getChannelCount() != 1 :
+				(audioTrack.getChannelCount() != 2 || channelIndex != channelSelect - 1);
+			if (!rateChanged && !channelChanged)
 				return;
 			audioTrack.stop();
 			audioTrack.release();
 		}
 		int channelConfig = AudioFormat.CHANNEL_OUT_MONO;
-		channelCount = 1;
 		channelIndex = 0;
+		channelCount = 1;
+		if (channelSelect > 0 && channelSelect < 3) {
+			channelIndex = channelSelect - 1;
+			channelCount = 2;
+			channelConfig = AudioFormat.CHANNEL_OUT_STEREO;
+		}
 		int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
 		int sampleSize = 2;
 		bufferLength = 2 * Integer.highestOneBit(sampleRate) * channelCount;
@@ -645,6 +653,7 @@ public class MainActivity extends AppCompatActivity {
 	protected void onSaveInstanceState(@NonNull Bundle state) {
 		state.putInt("nightMode", AppCompatDelegate.getDefaultNightMode());
 		state.putInt("sampleRate", sampleRate);
+		state.putInt("channelSelect", channelSelect);
 		state.putInt("operationMode", operationMode);
 		state.putInt("carrierFrequency", carrierFrequency);
 		state.putString("callSign", callSign);
@@ -659,6 +668,7 @@ public class MainActivity extends AppCompatActivity {
 		SharedPreferences.Editor edit = pref.edit();
 		edit.putInt("nightMode", AppCompatDelegate.getDefaultNightMode());
 		edit.putInt("sampleRate", sampleRate);
+		edit.putInt("channelSelect", channelSelect);
 		edit.putInt("operationMode", operationMode);
 		edit.putInt("carrierFrequency", carrierFrequency);
 		edit.putString("callSign", callSign);
@@ -672,6 +682,7 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle state) {
 		final int defaultSampleRate = 8000;
+		final int defaultChannelSelect = 0;
 		final int defaultOperationMode = 11;
 		final int defaultCarrierFrequency = 1850;
 		final String defaultCallSign = "ANONYMOUS";
@@ -682,6 +693,7 @@ public class MainActivity extends AppCompatActivity {
 			SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
 			AppCompatDelegate.setDefaultNightMode(pref.getInt("nightMode", AppCompatDelegate.getDefaultNightMode()));
 			sampleRate = pref.getInt("sampleRate", defaultSampleRate);
+			channelSelect = pref.getInt("channelSelect", defaultChannelSelect);
 			operationMode = pref.getInt("operationMode", defaultOperationMode);
 			carrierFrequency = pref.getInt("carrierFrequency", defaultCarrierFrequency);
 			callSign = pref.getString("callSign", defaultCallSign);
@@ -691,6 +703,7 @@ public class MainActivity extends AppCompatActivity {
 		} else {
 			AppCompatDelegate.setDefaultNightMode(state.getInt("nightMode", AppCompatDelegate.getDefaultNightMode()));
 			sampleRate = state.getInt("sampleRate", defaultSampleRate);
+			channelSelect = state.getInt("channelSelect", defaultChannelSelect);
 			operationMode = state.getInt("operationMode", defaultOperationMode);
 			carrierFrequency = state.getInt("carrierFrequency", defaultCarrierFrequency);
 			callSign = state.getString("callSign", defaultCallSign);
@@ -803,6 +816,30 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
+	private void setChannelSelect(int newChannelSelect) {
+		if (audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING)
+			return;
+		if (channelSelect == newChannelSelect)
+			return;
+		channelSelect = newChannelSelect;
+		updateChannelSelectMenu();
+		initAudioTrack();
+	}
+
+	private void updateChannelSelectMenu() {
+		switch (channelSelect) {
+			case 0:
+				menu.findItem(R.id.action_set_channel_default).setChecked(true);
+				break;
+			case 1:
+				menu.findItem(R.id.action_set_channel_first).setChecked(true);
+				break;
+			case 2:
+				menu.findItem(R.id.action_set_channel_second).setChecked(true);
+				break;
+		}
+	}
+
 	private void updateCompressionMethodButton(boolean formatChanged) {
 		binding.lossy.setOnCheckedChangeListener(null);
 		switch (imageFormat) {
@@ -834,6 +871,7 @@ public class MainActivity extends AppCompatActivity {
 		this.menu = menu;
 		initEncoder();
 		updateSampleRateMenu();
+		updateChannelSelectMenu();
 		if (doRecode) {
 			busyRecoding();
 			handler.postDelayed(finishCreate, 1000);
@@ -865,6 +903,18 @@ public class MainActivity extends AppCompatActivity {
 		}
 		if (id == R.id.action_set_rate_48000) {
 			setSampleRate(48000);
+			return true;
+		}
+		if (id == R.id.action_set_channel_default) {
+			setChannelSelect(0);
+			return true;
+		}
+		if (id == R.id.action_set_channel_first) {
+			setChannelSelect(1);
+			return true;
+		}
+		if (id == R.id.action_set_channel_second) {
+			setChannelSelect(2);
 			return true;
 		}
 		if (id == R.id.action_enable_night_mode) {

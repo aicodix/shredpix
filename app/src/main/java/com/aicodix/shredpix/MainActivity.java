@@ -69,7 +69,9 @@ public class MainActivity extends AppCompatActivity {
 	private String imageFormat;
 	private String pixelCount;
 	private AudioTrack audioTrack;
-	private int bufferSize;
+	private int bufferLength;
+	private int channelCount;
+	private int channelIndex;
 	private short[] audioBuffer;
 	private byte[] payload;
 	private boolean doRecode;
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private native void configureEncoder(byte[] payload, byte[] callSign, int operationMode, int carrierFrequency);
 
-	private native boolean produceEncoder(short[] audioBuffer);
+	private native boolean produceEncoder(short[] audioBuffer, int channelCount, int channelIndex);
 
 	private native void destroyEncoder();
 
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
 		@Override
 		public void onPeriodicNotification(AudioTrack audioTrack) {
-			if (produceEncoder(audioBuffer)) {
+			if (produceEncoder(audioBuffer, channelCount, channelIndex)) {
 				audioTrack.write(audioBuffer, 0, audioBuffer.length);
 			} else {
 				audioTrack.stop();
@@ -116,14 +118,17 @@ public class MainActivity extends AppCompatActivity {
 			audioTrack.release();
 		}
 		int channelConfig = AudioFormat.CHANNEL_OUT_MONO;
+		channelCount = 1;
+		channelIndex = 0;
 		int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
 		int sampleSize = 2;
-		bufferSize = 2 * Integer.highestOneBit(sampleRate);
+		bufferLength = 2 * Integer.highestOneBit(sampleRate) * channelCount;
+		int bufferSize = sampleSize * bufferLength;
 		int symbolLength = (1280 * sampleRate) / 8000;
 		int guardLength = symbolLength / 8;
 		int extendedLength = symbolLength + guardLength;
-		audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig, audioFormat, sampleSize * bufferSize, AudioTrack.MODE_STREAM);
-		audioBuffer = new short[extendedLength];
+		audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig, audioFormat, bufferSize, AudioTrack.MODE_STREAM);
+		audioBuffer = new short[extendedLength * channelCount];
 		audioTrack.setPlaybackPositionUpdateListener(audioListener);
 		audioTrack.setPositionNotificationPeriod(extendedLength);
 	}
@@ -846,7 +851,7 @@ public class MainActivity extends AppCompatActivity {
 			} else {
 				busySending();
 				configureEncoder(payload, callTerm(), operationMode, carrierFrequency);
-				audioTrack.write(new short[bufferSize], 0, bufferSize);
+				audioTrack.write(new short[bufferLength], 0, bufferLength);
 				audioTrack.play();
 			}
 		}

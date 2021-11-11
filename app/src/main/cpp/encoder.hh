@@ -24,7 +24,7 @@ Copyright 2021 Ahmet Inan <inan@aicodix.de>
 struct Interface {
 	virtual void configure(const uint8_t *, const int8_t *, int, int) = 0;
 
-	virtual bool produce(int16_t *) = 0;
+	virtual bool produce(int16_t *, int, int) = 0;
 
 	virtual int rate() = 0;
 
@@ -207,7 +207,7 @@ public:
 		return RATE;
 	}
 
-	bool produce(int16_t *audio_buffer) final {
+	bool produce(int16_t *audio_buffer, int channel_count, int channel_index) final {
 		switch (count_down) {
 			case 6:
 				pilot_block();
@@ -240,12 +240,12 @@ public:
 			float x = i / float(guard_length - 1);
 			float y = 0.5f * (1 - std::cos(DSP::Const<float>::Pi() * x));
 			float sum = DSP::lerp(guard[i], temp[i + symbol_length - guard_length].real(), y);
-			audio_buffer[i] = std::clamp<float>(std::nearbyint(32767 * sum), -32768, 32767);
+			audio_buffer[channel_count * i + channel_index] = std::clamp<float>(std::nearbyint(32767 * sum), -32768, 32767);
 		}
 		for (int i = 0; i < guard_length; ++i)
 			guard[i] = temp[i].real();
 		for (int i = 0; i < symbol_length; ++i)
-			audio_buffer[i + guard_length] = std::clamp<float>(std::nearbyint(32767 * temp[i].real()), -32768, 32767);
+			audio_buffer[channel_count * (i + guard_length) + channel_index] = std::clamp<float>(std::nearbyint(32767 * temp[i].real()), -32768, 32767);
 		return true;
 	}
 

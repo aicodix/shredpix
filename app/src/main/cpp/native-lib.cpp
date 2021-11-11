@@ -45,7 +45,9 @@ extern "C" JNIEXPORT jboolean JNICALL
 Java_com_aicodix_shredpix_MainActivity_produceEncoder(
 	JNIEnv *env,
 	jobject,
-	jshortArray JNI_audioBuffer) {
+	jshortArray JNI_audioBuffer,
+	jint channelCount,
+	jint channelIndex) {
 
 	if (!encoder)
 		return false;
@@ -53,7 +55,7 @@ Java_com_aicodix_shredpix_MainActivity_produceEncoder(
 	jshort *audioBuffer = env->GetShortArrayElements(JNI_audioBuffer, nullptr);
 	jboolean okay = false;
 	if (audioBuffer)
-		okay = encoder->produce(audioBuffer);
+		okay = encoder->produce(audioBuffer, channelCount, channelIndex);
 	env->ReleaseShortArrayElements(JNI_audioBuffer, audioBuffer, 0);
 	return okay;
 }

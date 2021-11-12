@@ -1,48 +1,61 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.aicodix.encofdmtv.MainActivity">
-    <item android:title="@string/encode"
-        android:id="@+id/action_encode"
-        android:icon="@android:drawable/ic_menu_send"
-        app:iconTint="@color/tint"
-        app:showAsAction="always" />
-    <item android:title="@string/sample_rate"><menu>
-        <group android:checkableBehavior="single">
-            <item
-                android:id="@+id/action_set_rate_8000"
-                android:title="@string/rate_8000" />
-            <item
-                android:id="@+id/action_set_rate_44100"
-                android:title="@string/rate_44100" />
-            <item
-                android:id="@+id/action_set_rate_48000"
-                android:title="@string/rate_48000" />
-        </group></menu></item>
-    <item android:title="@string/channel_select"><menu>
-        <group android:checkableBehavior="single">
-            <item
-                android:id="@+id/action_set_channel_default"
-                android:title="@string/channel_default" />
-            <item
-                android:id="@+id/action_set_channel_first"
-                android:title="@string/channel_first" />
-            <item
-                android:id="@+id/action_set_channel_second"
-                android:title="@string/channel_second" />
-        </group></menu></item>
-    <item android:title="@string/night_mode"><menu>
-        <item
-            android:id="@+id/action_enable_night_mode"
-            android:title="@string/enable" />
-        <item
-            android:id="@+id/action_disable_night_mode"
-            android:title="@string/disable" />
-    </menu></item>
-    <item android:title="@string/force_quit"><menu>
-        <item
-            android:id="@+id/action_force_quit"
-            android:title="@string/quit" />
-    </menu></item>
-    <item android:id="@+id/action_about" android:title="@string/about" />
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	tools:context="com.aicodix.encofdmtv.MainActivity">
+	<item
+		android:id="@+id/action_encode"
+		android:icon="@android:drawable/ic_menu_send"
+		android:title="@string/encode"
+		app:iconTint="@color/tint"
+		app:showAsAction="always" />
+	<item android:title="@string/sample_rate">
+		<menu>
+			<group android:checkableBehavior="single">
+				<item
+					android:id="@+id/action_set_rate_8000"
+					android:title="@string/rate_8000" />
+				<item
+					android:id="@+id/action_set_rate_44100"
+					android:title="@string/rate_44100" />
+				<item
+					android:id="@+id/action_set_rate_48000"
+					android:title="@string/rate_48000" />
+			</group>
+		</menu>
+	</item>
+	<item android:title="@string/channel_select">
+		<menu>
+			<group android:checkableBehavior="single">
+				<item
+					android:id="@+id/action_set_channel_default"
+					android:title="@string/channel_default" />
+				<item
+					android:id="@+id/action_set_channel_first"
+					android:title="@string/channel_first" />
+				<item
+					android:id="@+id/action_set_channel_second"
+					android:title="@string/channel_second" />
+			</group>
+		</menu>
+	</item>
+	<item android:title="@string/night_mode">
+		<menu>
+			<item
+				android:id="@+id/action_enable_night_mode"
+				android:title="@string/enable" />
+			<item
+				android:id="@+id/action_disable_night_mode"
+				android:title="@string/disable" />
+		</menu>
+	</item>
+	<item android:title="@string/force_quit">
+		<menu>
+			<item
+				android:id="@+id/action_force_quit"
+				android:title="@string/quit" />
+		</menu>
+	</item>
+	<item
+		android:id="@+id/action_about"
+		android:title="@string/about" />
 </menu>

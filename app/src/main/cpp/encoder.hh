@@ -24,7 +24,7 @@ Copyright 2021 Ahmet Inan <inan@aicodix.de>
 struct Interface {
 	virtual void configure(const uint8_t *, const int8_t *, int, int) = 0;
 
-	virtual bool produce(int16_t *, int, int) = 0;
+	virtual bool produce(int16_t *, int) = 0;
 
 	virtual int rate() = 0;
 
@@ -51,8 +51,7 @@ class Encoder : public Interface {
 	CODE::BoseChaudhuriHocquenghemEncoder<255, 71> bch;
 	ImprovePAPR<cmplx, symbol_length, RATE == 8000 ? 4 : 1> improve_papr;
 	Polar polar;
-	cmplx temp[extended_length], freq[symbol_length], cons[32400], prev[512];
-	float guard[guard_length];
+	cmplx temp[extended_length], freq[symbol_length], cons[32400], prev[512], guard[guard_length];
 	uint8_t mesg[data_bits / 8];
 	uint64_t meta_data;
 	int pay_car_cnt = 0;
@@ -193,7 +192,24 @@ class Encoder : public Interface {
 		pay_car_off = -pay_car_cnt / 2;
 		symbol_number = 0;
 	}
-
+	void next_sample(int16_t *samples, cmplx signal, int channel, int i) {
+		switch (channel) {
+			case 1:
+				samples[2 * i] = std::clamp<float>(std::nearbyint(32767 * signal.real()), -32768, 32767);
+				samples[2 * i + 1] = 0;
+				break;
+			case 2:
+				samples[2 * i] = 0;
+				samples[2 * i + 1] = std::clamp<float>(std::nearbyint(32767 * signal.real()), -32768, 32767);
+				break;
+			case 4:
+				samples[2 * i] = std::clamp<float>(std::nearbyint(32767 * signal.real()), -32768, 32767);
+				samples[2 * i + 1] = std::clamp<float>(std::nearbyint(32767 * signal.imag()), -32768, 32767);
+				break;
+			default:
+				samples[i] = std::clamp<float>(std::nearbyint(32767 * signal.real()), -32768, 32767);
+		}
+	}
 public:
 	Encoder() : crc(0xA8F4), bch({
 		0b100011101, 0b101110111, 0b111110011, 0b101101001,
@@ -207,7 +223,7 @@ public:
 		return RATE;
 	}
 
-	bool produce(int16_t *audio_buffer, int channel_count, int channel_index) final {
+	bool produce(int16_t *audio_buffer, int channel_select) final {
 		switch (count_down) {
 			case 6:
 				pilot_block();
@@ -239,13 +255,13 @@ public:
 		for (int i = 0; i < guard_length; ++i) {
 			float x = i / float(guard_length - 1);
 			float y = 0.5f * (1 - std::cos(DSP::Const<float>::Pi() * x));
-			float sum = DSP::lerp(guard[i], temp[i + symbol_length - guard_length].real(), y);
-			audio_buffer[channel_count * i + channel_index] = std::clamp<float>(std::nearbyint(32767 * sum), -32768, 32767);
+			cmplx sum = DSP::lerp(guard[i], temp[i + symbol_length - guard_length], y);
+			next_sample(audio_buffer, sum, channel_select, i);
 		}
 		for (int i = 0; i < guard_length; ++i)
-			guard[i] = temp[i].real();
+			guard[i] = temp[i];
 		for (int i = 0; i < symbol_length; ++i)
-			audio_buffer[channel_count * (i + guard_length) + channel_index] = std::clamp<float>(std::nearbyint(32767 * temp[i].real()), -32768, 32767);
+			next_sample(audio_buffer, temp[i], channel_select, i + guard_length);
 		return true;
 	}
 

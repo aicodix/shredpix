@@ -65,14 +65,13 @@ public class MainActivity extends AppCompatActivity {
 	private int channelSelect;
 	private int operationMode;
 	private int carrierFrequency;
-	private int bandWidth;
+	private int minCarrierFrequency;
+	private int maxCarrierFrequency;
 	private String callSign;
 	private String imageFormat;
 	private String pixelCount;
 	private AudioTrack audioTrack;
 	private int bufferLength;
-	private int channelCount;
-	private int channelIndex;
 	private short[] audioBuffer;
 	private byte[] payload;
 	private boolean doRecode;
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private native void configureEncoder(byte[] payload, byte[] callSign, int operationMode, int carrierFrequency);
 
-	private native boolean produceEncoder(short[] audioBuffer, int channelCount, int channelIndex);
+	private native boolean produceEncoder(short[] audioBuffer, int channelSelect);
 
 	private native void destroyEncoder();
 
@@ -101,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
 		@Override
 		public void onPeriodicNotification(AudioTrack audioTrack) {
-			if (produceEncoder(audioBuffer, channelCount, channelIndex)) {
+			if (produceEncoder(audioBuffer, channelSelect)) {
 				audioTrack.write(audioBuffer, 0, audioBuffer.length);
 			} else {
 				audioTrack.stop();
@@ -113,18 +112,15 @@ public class MainActivity extends AppCompatActivity {
 	private void initAudioTrack() {
 		if (audioTrack != null) {
 			boolean rateChanged = audioTrack.getSampleRate() != sampleRate;
-			boolean channelChanged = channelSelect == 0 ? audioTrack.getChannelCount() != 1 :
-				(audioTrack.getChannelCount() != 2 || channelIndex != channelSelect - 1);
+			boolean channelChanged = audioTrack.getChannelCount() != (channelSelect == 0 ? 1 : 2);
 			if (!rateChanged && !channelChanged)
 				return;
 			audioTrack.stop();
 			audioTrack.release();
 		}
 		int channelConfig = AudioFormat.CHANNEL_OUT_MONO;
-		channelIndex = 0;
-		channelCount = 1;
-		if (channelSelect > 0 && channelSelect < 3) {
-			channelIndex = channelSelect - 1;
+		int channelCount = 1;
+		if (channelSelect != 0) {
 			channelCount = 2;
 			channelConfig = AudioFormat.CHANNEL_OUT_STEREO;
 		}
@@ -412,10 +408,10 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private String[] carrierValues() {
-		int count = (sampleRate / 2 - bandWidth) / 50 + 1;
+		int count = (maxCarrierFrequency - minCarrierFrequency) / 50 + 1;
 		String[] values = new String[count];
 		for (int i = 0; i < count; ++i)
-			values[i] = String.format(Locale.US, "%d", i * 50 + bandWidth / 2);
+			values[i] = String.format(Locale.US, "%d", i * 50 + minCarrierFrequency);
 		return values;
 	}
 
@@ -540,6 +536,7 @@ public class MainActivity extends AppCompatActivity {
 	};
 
 	private void updateCarriers() {
+		int bandWidth = 0;
 		switch (operationMode) {
 			case 6:
 				bandWidth = 2700;
@@ -563,13 +560,15 @@ public class MainActivity extends AppCompatActivity {
 				break;
 		}
 		bandWidth = ((bandWidth + 99) / 100) * 100;
-		if (carrierFrequency < bandWidth / 2)
-			carrierFrequency = bandWidth / 2;
-		if (carrierFrequency > (sampleRate - bandWidth) / 2)
-			carrierFrequency = (sampleRate - bandWidth) / 2;
+		maxCarrierFrequency = (sampleRate - bandWidth) / 2;
+		minCarrierFrequency = channelSelect == 4 ? -maxCarrierFrequency : bandWidth / 2;
+		if (carrierFrequency < minCarrierFrequency)
+			carrierFrequency = minCarrierFrequency;
+		if (carrierFrequency > maxCarrierFrequency)
+			carrierFrequency = maxCarrierFrequency;
 		binding.carrier.setDisplayedValues(null);
-		binding.carrier.setMaxValue((sampleRate / 2 - bandWidth) / 50);
-		binding.carrier.setValue((carrierFrequency - bandWidth / 2) / 50);
+		binding.carrier.setMaxValue((maxCarrierFrequency - minCarrierFrequency) / 50);
+		binding.carrier.setValue((carrierFrequency - minCarrierFrequency) / 50);
 		binding.carrier.setDisplayedValues(carrierValues());
 		setInputType(binding.carrier, InputType.TYPE_CLASS_NUMBER);
 	}
@@ -735,7 +734,7 @@ public class MainActivity extends AppCompatActivity {
 
 		binding.carrier.setMinValue(0);
 		updateCarriers();
-		binding.carrier.setOnValueChangedListener((numberPicker, oldVal, newVal) -> carrierFrequency = newVal * 50 + bandWidth / 2);
+		binding.carrier.setOnValueChangedListener((numberPicker, oldVal, newVal) -> carrierFrequency = newVal * 50 + minCarrierFrequency);
 
 		binding.call.setText(callSign);
 		binding.call.addTextChangedListener(callListener);
@@ -823,6 +822,7 @@ public class MainActivity extends AppCompatActivity {
 			return;
 		channelSelect = newChannelSelect;
 		updateChannelSelectMenu();
+		updateCarriers();
 		initAudioTrack();
 	}
 
@@ -836,6 +836,9 @@ public class MainActivity extends AppCompatActivity {
 				break;
 			case 2:
 				menu.findItem(R.id.action_set_channel_second).setChecked(true);
+				break;
+			case 4:
+				menu.findItem(R.id.action_set_channel_analytic).setChecked(true);
 				break;
 		}
 	}
@@ -915,6 +918,10 @@ public class MainActivity extends AppCompatActivity {
 		}
 		if (id == R.id.action_set_channel_second) {
 			setChannelSelect(2);
+			return true;
+		}
+		if (id == R.id.action_set_channel_analytic) {
+			setChannelSelect(4);
 			return true;
 		}
 		if (id == R.id.action_enable_night_mode) {

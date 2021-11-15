@@ -35,6 +35,9 @@
 				<item
 					android:id="@+id/action_set_channel_second"
 					android:title="@string/channel_second" />
+				<item
+					android:id="@+id/action_set_channel_analytic"
+					android:title="@string/channel_analytic" />
 			</group>
 		</menu>
 	</item>

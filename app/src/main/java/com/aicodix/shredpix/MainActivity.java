@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -677,7 +676,6 @@ public class MainActivity extends AppCompatActivity {
 		edit.apply();
 	}
 
-	@SuppressLint("ResourceType")
 	@Override
 	protected void onCreate(Bundle state) {
 		final int defaultSampleRate = 8000;
@@ -748,7 +746,7 @@ public class MainActivity extends AppCompatActivity {
 		if (stream != null)
 			sourceBitmap = decodeStream(stream);
 		if (stream == null || sourceBitmap == null) {
-			stream = getResources().openRawResource(R.drawable.smpte_color_bars);
+			stream = getResources().openRawResource(R.raw.smpte_color_bars);
 			payload = new byte[payloadSize];
 			try {
 				int size = stream.available();

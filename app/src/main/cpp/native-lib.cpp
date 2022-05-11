@@ -21,6 +21,12 @@ Java_com_aicodix_shredpix_MainActivity_createEncoder(
 		case 8000:
 			encoder = new(std::nothrow) Encoder<8000>();
 			break;
+		case 16000:
+			encoder = new(std::nothrow) Encoder<16000>();
+			break;
+		case 32000:
+			encoder = new(std::nothrow) Encoder<32000>();
+			break;
 		case 44100:
 			encoder = new(std::nothrow) Encoder<44100>();
 			break;

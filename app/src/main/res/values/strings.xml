@@ -2,6 +2,8 @@
 	<string name="app_name">Shredpix</string>
 	<string name="sample_rate">Sample Rate</string>
 	<string name="rate_8000">8 kHz</string>
+	<string name="rate_16000">16 kHz</string>
+	<string name="rate_32000">32 kHz</string>
 	<string name="rate_44100">44.1 kHz (read WARNING)</string>
 	<string name="rate_48000">48 kHz (read WARNING)</string>
 	<string name="channel_select">Channel Select</string>

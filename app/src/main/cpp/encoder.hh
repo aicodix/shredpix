@@ -49,7 +49,7 @@ class Encoder : public Interface {
 	DSP::FastFourierTransform<symbol_length, cmplx, 1> bwd;
 	CODE::CRC<uint16_t> crc;
 	CODE::BoseChaudhuriHocquenghemEncoder<255, 71> bch;
-	ImprovePAPR<cmplx, symbol_length, RATE == 8000 ? 4 : 1> improve_papr;
+	ImprovePAPR<cmplx, symbol_length, RATE <= 16000 ? 4 : 1> improve_papr;
 	Polar polar;
 	cmplx temp[extended_length], freq[symbol_length], cons[32400], prev[512], guard[guard_length];
 	uint8_t mesg[data_bits / 8];
@@ -147,7 +147,7 @@ class Encoder : public Interface {
 	}
 
 	void transform(bool papr_reduction = true) {
-		if (papr_reduction && RATE == 8000)
+		if (papr_reduction && RATE <= 16000)
 			improve_papr(freq);
 		bwd(temp, freq);
 		for (int i = 0; i < symbol_length; ++i)

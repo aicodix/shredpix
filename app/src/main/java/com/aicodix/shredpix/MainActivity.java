@@ -804,6 +804,12 @@ public class MainActivity extends AppCompatActivity {
 			case 8000:
 				menu.findItem(R.id.action_set_rate_8000).setChecked(true);
 				break;
+			case 16000:
+				menu.findItem(R.id.action_set_rate_16000).setChecked(true);
+				break;
+			case 32000:
+				menu.findItem(R.id.action_set_rate_32000).setChecked(true);
+				break;
 			case 44100:
 				menu.findItem(R.id.action_set_rate_44100).setChecked(true);
 				break;
@@ -896,6 +902,14 @@ public class MainActivity extends AppCompatActivity {
 		}
 		if (id == R.id.action_set_rate_8000) {
 			setSampleRate(8000);
+			return true;
+		}
+		if (id == R.id.action_set_rate_16000) {
+			setSampleRate(16000);
+			return true;
+		}
+		if (id == R.id.action_set_rate_32000) {
+			setSampleRate(32000);
 			return true;
 		}
 		if (id == R.id.action_set_rate_44100) {

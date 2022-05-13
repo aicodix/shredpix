@@ -47,6 +47,18 @@
 			</group>
 		</menu>
 	</item>
+	<item android:title="@string/fancy_header">
+		<menu>
+			<group android:checkableBehavior="single">
+				<item
+					android:id="@+id/action_enable_fancy_header"
+					android:title="@string/enable" />
+				<item
+					android:id="@+id/action_disable_fancy_header"
+					android:title="@string/disable" />
+			</group>
+		</menu>
+	</item>
 	<item android:title="@string/night_mode">
 		<menu>
 			<item

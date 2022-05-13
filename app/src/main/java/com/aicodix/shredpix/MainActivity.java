@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private final int payloadSize = 5380;
 	private boolean lossyCompression;
+	private boolean fancyHeader;
 	private int sampleRate;
 	private int channelSelect;
 	private int operationMode;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private native boolean createEncoder(int sampleRate);
 
-	private native void configureEncoder(byte[] payload, byte[] callSign, int operationMode, int carrierFrequency);
+	private native void configureEncoder(byte[] payload, byte[] callSign, int operationMode, int carrierFrequency, boolean fancyHeader);
 
 	private native boolean produceEncoder(short[] audioBuffer, int channelSelect);
 
@@ -658,6 +659,7 @@ public class MainActivity extends AppCompatActivity {
 		state.putString("imageFormat", imageFormat);
 		state.putString("pixelCount", pixelCount);
 		state.putBoolean("lossyCompression", lossyCompression);
+		state.putBoolean("fancyHeader", fancyHeader);
 		super.onSaveInstanceState(state);
 	}
 
@@ -673,6 +675,7 @@ public class MainActivity extends AppCompatActivity {
 		edit.putString("imageFormat", imageFormat);
 		edit.putString("pixelCount", pixelCount);
 		edit.putBoolean("lossyCompression", lossyCompression);
+		edit.putBoolean("fancyHeader", fancyHeader);
 		edit.apply();
 	}
 
@@ -686,6 +689,7 @@ public class MainActivity extends AppCompatActivity {
 		final String defaultImageFormat = "WebP";
 		final String defaultPixelCount = "64K";
 		final boolean defaultLossyCompression = true;
+		final boolean defaultFancyHeader = true;
 		if (state == null) {
 			SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
 			AppCompatDelegate.setDefaultNightMode(pref.getInt("nightMode", AppCompatDelegate.getDefaultNightMode()));
@@ -697,6 +701,7 @@ public class MainActivity extends AppCompatActivity {
 			imageFormat = pref.getString("imageFormat", defaultImageFormat);
 			pixelCount = pref.getString("pixelCount", defaultPixelCount);
 			lossyCompression = pref.getBoolean("lossyCompression", defaultLossyCompression);
+			fancyHeader = pref.getBoolean("fancyHeader", defaultFancyHeader);
 		} else {
 			AppCompatDelegate.setDefaultNightMode(state.getInt("nightMode", AppCompatDelegate.getDefaultNightMode()));
 			sampleRate = state.getInt("sampleRate", defaultSampleRate);
@@ -707,6 +712,7 @@ public class MainActivity extends AppCompatActivity {
 			imageFormat = state.getString("imageFormat", defaultImageFormat);
 			pixelCount = state.getString("pixelCount", defaultPixelCount);
 			lossyCompression = state.getBoolean("lossyCompression", defaultLossyCompression);
+			fancyHeader = state.getBoolean("fancyHeader", defaultFancyHeader);
 		}
 		super.onCreate(state);
 		binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -819,6 +825,20 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
+	private void setFancyHeader(boolean newFancyHeader) {
+		if (fancyHeader == newFancyHeader)
+			return;
+		fancyHeader = newFancyHeader;
+		updateFancyHeaderMenu();
+	}
+
+	private void updateFancyHeaderMenu() {
+		if (fancyHeader)
+			menu.findItem(R.id.action_enable_fancy_header).setChecked(true);
+		else
+			menu.findItem(R.id.action_disable_fancy_header).setChecked(true);
+	}
+
 	private void setChannelSelect(int newChannelSelect) {
 		if (audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING)
 			return;
@@ -879,6 +899,7 @@ public class MainActivity extends AppCompatActivity {
 		initEncoder();
 		updateSampleRateMenu();
 		updateChannelSelectMenu();
+		updateFancyHeaderMenu();
 		if (doRecode) {
 			busyRecoding();
 			handler.postDelayed(finishCreate, 1000);
@@ -895,7 +916,7 @@ public class MainActivity extends AppCompatActivity {
 				doneSending();
 			} else {
 				busySending();
-				configureEncoder(payload, callTerm(), operationMode, carrierFrequency);
+				configureEncoder(payload, callTerm(), operationMode, carrierFrequency, fancyHeader);
 				audioTrack.write(new short[bufferLength], 0, bufferLength);
 				audioTrack.play();
 			}
@@ -934,6 +955,14 @@ public class MainActivity extends AppCompatActivity {
 		}
 		if (id == R.id.action_set_channel_analytic) {
 			setChannelSelect(4);
+			return true;
+		}
+		if (id == R.id.action_enable_fancy_header) {
+			setFancyHeader(true);
+			return true;
+		}
+		if (id == R.id.action_disable_fancy_header) {
+			setFancyHeader(false);
 			return true;
 		}
 		if (id == R.id.action_enable_night_mode) {

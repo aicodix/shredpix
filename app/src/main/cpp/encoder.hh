@@ -10,6 +10,7 @@ Copyright 2021 Ahmet Inan <inan@aicodix.de>
 #include <iostream>
 #include <algorithm>
 #include "bose_chaudhuri_hocquenghem_encoder.hh"
+#include "base37_bitmap.hh"
 #include "xorshift.hh"
 #include "complex.hh"
 #include "bitman.hh"
@@ -22,7 +23,7 @@ Copyright 2021 Ahmet Inan <inan@aicodix.de>
 #include "crc.hh"
 
 struct Interface {
-	virtual void configure(const uint8_t *, const int8_t *, int, int) = 0;
+	virtual void configure(const uint8_t *, const int8_t *, int, int, bool) = 0;
 
 	virtual bool produce(int16_t *, int) = 0;
 
@@ -44,6 +45,7 @@ class Encoder : public Interface {
 	static const int cor_seq_poly = 0b10001001;
 	static const int pre_seq_len = 255;
 	static const int pre_seq_off = -pre_seq_len / 2;
+	static const int fancy_off = -(8 * 9 * 3) / 2;
 	static const int pre_seq_poly = 0b100101011;
 	static const int pilot_poly = 0b100101011;
 	DSP::FastFourierTransform<symbol_length, cmplx, 1> bwd;
@@ -52,7 +54,7 @@ class Encoder : public Interface {
 	ImprovePAPR<cmplx, symbol_length, RATE <= 16000 ? 4 : 1> improve_papr;
 	Polar polar;
 	cmplx temp[extended_length], freq[symbol_length], cons[32400], prev[512], guard[guard_length];
-	uint8_t mesg[data_bits / 8];
+	uint8_t mesg[data_bits / 8], call[9];
 	uint64_t meta_data;
 	int pay_car_cnt = 0;
 	int pay_car_off = 0;
@@ -60,6 +62,7 @@ class Encoder : public Interface {
 	int symbol_count = 0;
 	int symbol_number = 0;
 	int count_down = 0;
+	int fancy_line = 0;
 
 	static uint64_t base37(const int8_t *str) {
 		uint64_t acc = 0;
@@ -75,6 +78,16 @@ class Encoder : public Interface {
 				return -1;
 		}
 		return acc;
+	}
+
+	static uint8_t base37_map(int8_t c) {
+		if (c >= '0' && c <= '9')
+			return c - '0' + 1;
+		if (c >= 'a' && c <= 'z')
+			return c - 'a' + 11;
+		if (c >= 'A' && c <= 'Z')
+			return c - 'A' + 11;
+		return 0;
 	}
 
 	static int nrz(bool bit) {
@@ -121,6 +134,22 @@ class Encoder : public Interface {
 		for (int i = 0; i < pre_seq_len; ++i)
 			freq[bin(i + pre_seq_off)] *= nrz(seq());
 		transform();
+	}
+
+	void fancy_symbol() {
+		int active_carriers = 1;
+		for (int j = 0; j < 9; ++j)
+			for (int i = 0; i < 8; ++i)
+				active_carriers += (base37_bitmap[call[j] + 37 * (10 - fancy_line)] >> i) & 1;
+		CODE::MLS seq(pilot_poly);
+		float factor = std::sqrt(float(symbol_length) / active_carriers);
+		for (int i = 0; i < symbol_length; ++i)
+			freq[i] = 0;
+		for (int j = 0; j < 9; ++j)
+			for (int i = 0; i < 8; ++i)
+				if (base37_bitmap[call[j] + 37 * (10 - fancy_line)] & (1 << (7 - i)))
+					freq[bin((8 * j + i) * 3 + fancy_off)] = factor * nrz(seq());
+		transform(false);
 	}
 
 	void pilot_block() {
@@ -191,6 +220,7 @@ class Encoder : public Interface {
 		}
 		pay_car_off = -pay_car_cnt / 2;
 		symbol_number = 0;
+		fancy_line = 0;
 	}
 	void next_sample(int16_t *samples, cmplx signal, int channel, int i) {
 		switch (channel) {
@@ -225,6 +255,11 @@ public:
 
 	bool produce(int16_t *audio_buffer, int channel_select) final {
 		switch (count_down) {
+			case 7:
+				fancy_symbol();
+				if (++fancy_line == 11)
+					--count_down;
+				break;
 			case 6:
 				pilot_block();
 				--count_down;
@@ -265,10 +300,14 @@ public:
 		return true;
 	}
 
-	void configure(const uint8_t *payload, const int8_t *call_sign, int operation_mode, int carrier_frequency) final {
+	void configure(const uint8_t *payload, const int8_t *call_sign, int operation_mode, int carrier_frequency, bool fancy_header) final {
 		carrier_offset = (carrier_frequency * symbol_length) / RATE;
 		meta_data = (base37(call_sign) << 8) | operation_mode;
-		count_down = 6;
+		for (int i = 0; i < 9; ++i)
+			call[i] = 0;
+		for (int i = 0; i < 9 && call_sign[i]; ++i)
+			call[i] = base37_map(call_sign[i]);
+		count_down = 6 + fancy_header;
 		for (int i = 0; i < guard_length; ++i)
 			guard[i] = 0;
 		prepare(operation_mode);

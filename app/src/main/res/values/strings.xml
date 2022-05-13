@@ -11,6 +11,7 @@
 	<string name="channel_first">First</string>
 	<string name="channel_second">Second</string>
 	<string name="channel_analytic">Analytic</string>
+	<string name="fancy_header">Fancy Header</string>
 	<string name="night_mode">Night Mode</string>
 	<string name="enable">Enable</string>
 	<string name="disable">Disable</string>
@@ -57,6 +58,7 @@
 \n\nPolar and BCH codes:\nhttps://github.com/aicodix/code\nBSD Zero Clause License
 \n\nFast Fourier Transform:\nhttps://github.com/aicodix/dsp\nBSD Zero Clause License
 \n\nLauncher icon:\nhttp://tango.freedesktop.org/Tango_Desktop_Project\nPublic Domain
+\n\nFancy header font:\nhttp://terminus-font.sourceforge.net\nSIL Open Font License
 \n\nWARNING:\nThe higher sampling rates (44.1 and 48 kHz) enable carrier frequencies above 16 kHz for ultrasonic transmissions. Prolonged exposure to high pitched sounds can damage your hearing, even if you can\'t hear them.
 \n\nDISCLAIMER:\nTHE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</string>
 </resources>

@@ -64,22 +64,6 @@ class Encoder : public Interface {
 	int count_down = 0;
 	int fancy_line = 0;
 
-	static uint64_t base37(const int8_t *str) {
-		uint64_t acc = 0;
-		for (char c = *str++; c; c = *str++) {
-			acc *= 37;
-			if (c >= '0' && c <= '9')
-				acc += c - '0' + 1;
-			else if (c >= 'a' && c <= 'z')
-				acc += c - 'a' + 11;
-			else if (c >= 'A' && c <= 'Z')
-				acc += c - 'A' + 11;
-			else if (c != ' ')
-				return -1;
-		}
-		return acc;
-	}
-
 	static uint8_t base37_map(int8_t c) {
 		if (c >= '0' && c <= '9')
 			return c - '0' + 1;
@@ -88,6 +72,13 @@ class Encoder : public Interface {
 		if (c >= 'A' && c <= 'Z')
 			return c - 'A' + 11;
 		return 0;
+	}
+
+	static uint64_t base37(const int8_t *str) {
+		uint64_t acc = 0;
+		for (char c = *str++; c; c = *str++)
+			acc = 37 * acc + base37_map(c);
+		return acc;
 	}
 
 	static int nrz(bool bit) {

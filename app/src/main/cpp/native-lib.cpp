@@ -73,6 +73,7 @@ Java_com_aicodix_shredpix_MainActivity_configureEncoder(
 	jbyteArray JNI_callSign,
 	jint operationMode,
 	jint carrierFrequency,
+	jint noiseSymbols,
 	jboolean fancyHeader) {
 
 	if (!encoder)
@@ -89,7 +90,10 @@ Java_com_aicodix_shredpix_MainActivity_configureEncoder(
 	encoder->configure(
 		reinterpret_cast<uint8_t *>(payload),
 		reinterpret_cast<int8_t *>(callSign),
-		operationMode, carrierFrequency, fancyHeader);
+		operationMode,
+		carrierFrequency,
+		noiseSymbols,
+		fancyHeader);
 
 	env->ReleaseByteArrayElements(JNI_callSign, callSign, JNI_ABORT);
 	callSignFail:

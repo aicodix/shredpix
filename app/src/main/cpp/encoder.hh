@@ -23,7 +23,7 @@ Copyright 2021 Ahmet Inan <inan@aicodix.de>
 #include "crc.hh"
 
 struct Interface {
-	virtual void configure(const uint8_t *, const int8_t *, int, int, bool) = 0;
+	virtual void configure(const uint8_t *, const int8_t *, int, int, int, bool) = 0;
 
 	virtual bool produce(int16_t *, int) = 0;
 
@@ -48,9 +48,11 @@ class Encoder : public Interface {
 	static const int fancy_off = -(8 * 9 * 3) / 2;
 	static const int pre_seq_poly = 0b100101011;
 	static const int pilot_poly = 0b100101011;
+	static const int noise_poly = 0b100101010001;
 	DSP::FastFourierTransform<symbol_length, cmplx, 1> bwd;
 	CODE::CRC<uint16_t> crc;
 	CODE::BoseChaudhuriHocquenghemEncoder<255, 71> bch;
+	CODE::MLS noise_seq;
 	ImprovePAPR<cmplx, symbol_length, RATE <= 16000 ? 4 : 1> improve_papr;
 	Polar polar;
 	cmplx temp[extended_length], freq[symbol_length], cons[32400], prev[512], guard[guard_length];
@@ -63,6 +65,7 @@ class Encoder : public Interface {
 	int symbol_number = 0;
 	int count_down = 0;
 	int fancy_line = 0;
+	int noise_count = 0;
 
 	static uint8_t base37_map(int8_t c) {
 		if (c >= '0' && c <= '9')
@@ -140,6 +143,16 @@ class Encoder : public Interface {
 			for (int i = 0; i < 8; ++i)
 				if (base37_bitmap[call[j] + 37 * fancy_line] & (1 << (7 - i)))
 					freq[bin((8 * j + i) * 3 + fancy_off)] = factor * nrz(seq());
+		transform(false);
+	}
+
+	void noise_symbol() {
+		float factor = std::sqrt(symbol_length / (2.f * pay_car_cnt));
+		for (int i = 0; i < symbol_length; ++i)
+			freq[i] = 0;
+		for (int i = 0; i < pay_car_cnt; ++i)
+			freq[bin(i + pay_car_off)] = factor *
+				cmplx(nrz(noise_seq()),nrz(noise_seq()));
 		transform(false);
 	}
 
@@ -231,7 +244,7 @@ class Encoder : public Interface {
 		}
 	}
 public:
-	Encoder() : crc(0xA8F4), bch({
+	Encoder() : noise_seq(noise_poly), crc(0xA8F4), bch({
 		0b100011101, 0b101110111, 0b111110011, 0b101101001,
 		0b110111101, 0b111100111, 0b100101011, 0b111010111,
 		0b000010011, 0b101100101, 0b110001011, 0b101100011,
@@ -246,9 +259,12 @@ public:
 	bool produce(int16_t *audio_buffer, int channel_select) final {
 		switch (count_down) {
 			case 6:
-				pilot_block();
+				if (noise_count) {
+					--noise_count;
+					noise_symbol();
+					break;
+				}
 				--count_down;
-				break;
 			case 5:
 				schmidl_cox();
 				--count_down;
@@ -290,7 +306,7 @@ public:
 		return true;
 	}
 
-	void configure(const uint8_t *payload, const int8_t *call_sign, int operation_mode, int carrier_frequency, bool fancy_header) final {
+	void configure(const uint8_t *payload, const int8_t *call_sign, int operation_mode, int carrier_frequency, int noise_symbols, bool fancy_header) final {
 		carrier_offset = (carrier_frequency * symbol_length) / RATE;
 		meta_data = (base37(call_sign) << 8) | operation_mode;
 		for (int i = 0; i < 9; ++i)
@@ -299,6 +315,7 @@ public:
 			call[i] = base37_map(call_sign[i]);
 		count_down = 6;
 		fancy_line = 11 * fancy_header;
+		noise_count = noise_symbols;
 		for (int i = 0; i < guard_length; ++i)
 			guard[i] = 0;
 		prepare(operation_mode);

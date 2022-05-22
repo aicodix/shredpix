@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 	private final int payloadSize = 5380;
 	private boolean lossyCompression;
 	private boolean fancyHeader;
+	private int noiseSymbols;
 	private int sampleRate;
 	private int channelSelect;
 	private int operationMode;
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private native boolean createEncoder(int sampleRate);
 
-	private native void configureEncoder(byte[] payload, byte[] callSign, int operationMode, int carrierFrequency, boolean fancyHeader);
+	private native void configureEncoder(byte[] payload, byte[] callSign, int operationMode, int carrierFrequency, int noiseSymbols, boolean fancyHeader);
 
 	private native boolean produceEncoder(short[] audioBuffer, int channelSelect);
 
@@ -655,6 +656,7 @@ public class MainActivity extends AppCompatActivity {
 		state.putInt("channelSelect", channelSelect);
 		state.putInt("operationMode", operationMode);
 		state.putInt("carrierFrequency", carrierFrequency);
+		state.putInt("noiseSymbols", noiseSymbols);
 		state.putString("callSign", callSign);
 		state.putString("imageFormat", imageFormat);
 		state.putString("pixelCount", pixelCount);
@@ -671,6 +673,7 @@ public class MainActivity extends AppCompatActivity {
 		edit.putInt("channelSelect", channelSelect);
 		edit.putInt("operationMode", operationMode);
 		edit.putInt("carrierFrequency", carrierFrequency);
+		edit.putInt("noiseSymbols", noiseSymbols);
 		edit.putString("callSign", callSign);
 		edit.putString("imageFormat", imageFormat);
 		edit.putString("pixelCount", pixelCount);
@@ -685,6 +688,7 @@ public class MainActivity extends AppCompatActivity {
 		final int defaultChannelSelect = 0;
 		final int defaultOperationMode = 11;
 		final int defaultCarrierFrequency = 1850;
+		final int defaultNoiseSymbols = 1;
 		final String defaultCallSign = "ANONYMOUS";
 		final String defaultImageFormat = "WebP";
 		final String defaultPixelCount = "64K";
@@ -697,6 +701,7 @@ public class MainActivity extends AppCompatActivity {
 			channelSelect = pref.getInt("channelSelect", defaultChannelSelect);
 			operationMode = pref.getInt("operationMode", defaultOperationMode);
 			carrierFrequency = pref.getInt("carrierFrequency", defaultCarrierFrequency);
+			noiseSymbols = pref.getInt("noiseSymbols", defaultNoiseSymbols);
 			callSign = pref.getString("callSign", defaultCallSign);
 			imageFormat = pref.getString("imageFormat", defaultImageFormat);
 			pixelCount = pref.getString("pixelCount", defaultPixelCount);
@@ -708,6 +713,7 @@ public class MainActivity extends AppCompatActivity {
 			channelSelect = state.getInt("channelSelect", defaultChannelSelect);
 			operationMode = state.getInt("operationMode", defaultOperationMode);
 			carrierFrequency = state.getInt("carrierFrequency", defaultCarrierFrequency);
+			noiseSymbols = state.getInt("noiseSymbols", defaultNoiseSymbols);
 			callSign = state.getString("callSign", defaultCallSign);
 			imageFormat = state.getString("imageFormat", defaultImageFormat);
 			pixelCount = state.getString("pixelCount", defaultPixelCount);
@@ -825,6 +831,36 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
+	private void setNoiseSymbols(int newNoiseSymbols) {
+		if (noiseSymbols == newNoiseSymbols)
+			return;
+		noiseSymbols = newNoiseSymbols;
+		updateNoiseSymbolsMenu();
+	}
+
+	private void updateNoiseSymbolsMenu() {
+		switch (noiseSymbols) {
+			case 0:
+				menu.findItem(R.id.action_disable_noise).setChecked(true);
+				break;
+			case 1:
+				menu.findItem(R.id.action_set_noise_quarter_second).setChecked(true);
+				break;
+			case 3:
+				menu.findItem(R.id.action_set_noise_half_second).setChecked(true);
+				break;
+			case 6:
+				menu.findItem(R.id.action_set_noise_one_second).setChecked(true);
+				break;
+			case 11:
+				menu.findItem(R.id.action_set_noise_two_seconds).setChecked(true);
+				break;
+			case 22:
+				menu.findItem(R.id.action_set_noise_four_seconds).setChecked(true);
+				break;
+		}
+	}
+
 	private void setFancyHeader(boolean newFancyHeader) {
 		if (fancyHeader == newFancyHeader)
 			return;
@@ -899,6 +935,7 @@ public class MainActivity extends AppCompatActivity {
 		initEncoder();
 		updateSampleRateMenu();
 		updateChannelSelectMenu();
+		updateNoiseSymbolsMenu();
 		updateFancyHeaderMenu();
 		if (doRecode) {
 			busyRecoding();
@@ -916,7 +953,7 @@ public class MainActivity extends AppCompatActivity {
 				doneSending();
 			} else {
 				busySending();
-				configureEncoder(payload, callTerm(), operationMode, carrierFrequency, fancyHeader);
+				configureEncoder(payload, callTerm(), operationMode, carrierFrequency, noiseSymbols, fancyHeader);
 				audioTrack.write(new short[bufferLength], 0, bufferLength);
 				audioTrack.play();
 			}
@@ -955,6 +992,30 @@ public class MainActivity extends AppCompatActivity {
 		}
 		if (id == R.id.action_set_channel_analytic) {
 			setChannelSelect(4);
+			return true;
+		}
+		if (id == R.id.action_disable_noise) {
+			setNoiseSymbols(0);
+			return true;
+		}
+		if (id == R.id.action_set_noise_quarter_second) {
+			setNoiseSymbols(1);
+			return true;
+		}
+		if (id == R.id.action_set_noise_half_second) {
+			setNoiseSymbols(3);
+			return true;
+		}
+		if (id == R.id.action_set_noise_one_second) {
+			setNoiseSymbols(6);
+			return true;
+		}
+		if (id == R.id.action_set_noise_two_seconds) {
+			setNoiseSymbols(11);
+			return true;
+		}
+		if (id == R.id.action_set_noise_four_seconds) {
+			setNoiseSymbols(22);
 			return true;
 		}
 		if (id == R.id.action_enable_fancy_header) {

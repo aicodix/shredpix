@@ -47,6 +47,30 @@
 			</group>
 		</menu>
 	</item>
+	<item android:title="@string/leading_noise">
+		<menu>
+			<group android:checkableBehavior="single">
+				<item
+					android:id="@+id/action_disable_noise"
+					android:title="@string/disable" />
+				<item
+					android:id="@+id/action_set_noise_quarter_second"
+					android:title="@string/quarter_second" />
+				<item
+					android:id="@+id/action_set_noise_half_second"
+					android:title="@string/half_second" />
+				<item
+					android:id="@+id/action_set_noise_one_second"
+					android:title="@string/one_second" />
+				<item
+					android:id="@+id/action_set_noise_two_seconds"
+					android:title="@string/two_seconds" />
+				<item
+					android:id="@+id/action_set_noise_four_seconds"
+					android:title="@string/four_seconds" />
+			</group>
+		</menu>
+	</item>
 	<item android:title="@string/fancy_header">
 		<menu>
 			<group android:checkableBehavior="single">

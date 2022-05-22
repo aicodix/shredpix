@@ -131,14 +131,14 @@ class Encoder : public Interface {
 		int active_carriers = 1;
 		for (int j = 0; j < 9; ++j)
 			for (int i = 0; i < 8; ++i)
-				active_carriers += (base37_bitmap[call[j] + 37 * (10 - fancy_line)] >> i) & 1;
+				active_carriers += (base37_bitmap[call[j] + 37 * fancy_line] >> i) & 1;
 		CODE::MLS seq(pilot_poly);
 		float factor = std::sqrt(float(symbol_length) / active_carriers);
 		for (int i = 0; i < symbol_length; ++i)
 			freq[i] = 0;
 		for (int j = 0; j < 9; ++j)
 			for (int i = 0; i < 8; ++i)
-				if (base37_bitmap[call[j] + 37 * (10 - fancy_line)] & (1 << (7 - i)))
+				if (base37_bitmap[call[j] + 37 * fancy_line] & (1 << (7 - i)))
 					freq[bin((8 * j + i) * 3 + fancy_off)] = factor * nrz(seq());
 		transform(false);
 	}
@@ -211,7 +211,6 @@ class Encoder : public Interface {
 		}
 		pay_car_off = -pay_car_cnt / 2;
 		symbol_number = 0;
-		fancy_line = 0;
 	}
 	void next_sample(int16_t *samples, cmplx signal, int channel, int i) {
 		switch (channel) {
@@ -246,11 +245,6 @@ public:
 
 	bool produce(int16_t *audio_buffer, int channel_select) final {
 		switch (count_down) {
-			case 7:
-				fancy_symbol();
-				if (++fancy_line == 11)
-					--count_down;
-				break;
 			case 6:
 				pilot_block();
 				--count_down;
@@ -273,6 +267,11 @@ public:
 					--count_down;
 				break;
 			case 1:
+				if (fancy_line) {
+					--fancy_line;
+					fancy_symbol();
+					break;
+				}
 				silence();
 				--count_down;
 			default:
@@ -298,7 +297,8 @@ public:
 			call[i] = 0;
 		for (int i = 0; i < 9 && call_sign[i]; ++i)
 			call[i] = base37_map(call_sign[i]);
-		count_down = 6 + fancy_header;
+		count_down = 6;
+		fancy_line = 11 * fancy_header;
 		for (int i = 0; i < guard_length; ++i)
 			guard[i] = 0;
 		prepare(operation_mode);

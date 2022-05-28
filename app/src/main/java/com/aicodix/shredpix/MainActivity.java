@@ -688,7 +688,7 @@ public class MainActivity extends AppCompatActivity {
 		final int defaultChannelSelect = 0;
 		final int defaultOperationMode = 11;
 		final int defaultCarrierFrequency = 1850;
-		final int defaultNoiseSymbols = 1;
+		final int defaultNoiseSymbols = 6;
 		final String defaultCallSign = "ANONYMOUS";
 		final String defaultImageFormat = "WebP";
 		final String defaultPixelCount = "64K";

@@ -5,6 +5,7 @@ Copyright 2021 Ahmet Inan <inan@aicodix.de>
 */
 
 #include <jni.h>
+#define assert(expr)
 #include "encoder.hh"
 
 static Interface *encoder;

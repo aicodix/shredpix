@@ -290,6 +290,7 @@ public:
 				}
 				silence();
 				--count_down;
+				break;
 			default:
 				return false;
 		}

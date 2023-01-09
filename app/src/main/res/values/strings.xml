@@ -56,6 +56,9 @@
 		<item>12 (QPSK, 2400 Hz, 16 s)</item>
 		<item>13 (QPSK, 1600 Hz, 24 s)</item>
 	</string-array>
+	<string name="privacy_policy">Privacy Policy</string>
+	<string name="privacy_policy_text">Shredpix converts pictures together with your call sign to audio signals.
+Only your settings are stored in persistent storage on your device.</string>
 	<string name="about">About Shredpix</string>
 	<string name="about_text">Shredpix %1$s\nCopyright 2021 aicodix GmbH
 \n\nPlease read WARNING and DISCLAIMER at the bottom of this page.

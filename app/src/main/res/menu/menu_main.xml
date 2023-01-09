@@ -101,6 +101,9 @@
 		</menu>
 	</item>
 	<item
+		android:id="@+id/action_privacy_policy"
+		android:title="@string/privacy_policy" />
+	<item
 		android:id="@+id/action_about"
 		android:title="@string/about" />
 </menu>

@@ -23,6 +23,7 @@
 	<string name="disable">Disable</string>
 	<string name="force_quit">Force Quit</string>
 	<string name="quit">Quit</string>
+	<string name="close">Close</string>
 	<string name="image_description">Image to encode</string>
 	<string name="encode">Encode</string>
 	<string name="carrier">Carrier:</string>

@@ -26,6 +26,7 @@
 	<string name="close">Close</string>
 	<string name="image_description">Image to encode</string>
 	<string name="encode">Encode</string>
+	<string name="ping">Ping</string>
 	<string name="carrier">Carrier:</string>
 	<string name="mode">Mode:</string>
 	<string name="call">Call:</string>

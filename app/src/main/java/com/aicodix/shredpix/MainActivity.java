@@ -947,6 +947,14 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
+		if (id == R.id.action_ping) {
+			configureEncoder(payload, callTerm(), 0, carrierFrequency, noiseSymbols, fancyHeader);
+			if (audioTrack.getPlayState() != AudioTrack.PLAYSTATE_PLAYING) {
+				busySending();
+				audioTrack.write(new short[bufferLength], 0, bufferLength);
+				audioTrack.play();
+			}
+		}
 		if (id == R.id.action_encode) {
 			if (audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
 				audioTrack.stop();

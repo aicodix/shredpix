@@ -189,6 +189,10 @@ class Encoder : public Interface {
 
 	void prepare(int operation_mode) {
 		switch (operation_mode) {
+			case 0:
+				pay_car_cnt = 0;
+				symbol_count = 0;
+				break;
 			case 6:
 				pay_car_cnt = 432;
 				symbol_count = 50;
@@ -272,6 +276,8 @@ public:
 			case 4:
 				preamble();
 				--count_down;
+				if (!symbol_count)
+					count_down = 1;
 				break;
 			case 3:
 				pilot_block();
@@ -322,9 +328,11 @@ public:
 		for (int i = 0; i < guard_length; ++i)
 			guard[i] = 0;
 		prepare(operation_mode);
-		CODE::Xorshift32 scrambler;
-		for (int i = 0; i < data_bits / 8; ++i)
-			mesg[i] = payload[i] ^ scrambler();
-		polar(cons, mesg, operation_mode);
+		if (operation_mode) {
+			CODE::Xorshift32 scrambler;
+			for (int i = 0; i < data_bits / 8; ++i)
+				mesg[i] = payload[i] ^ scrambler();
+			polar(cons, mesg, operation_mode);
+		}
 	}
 };

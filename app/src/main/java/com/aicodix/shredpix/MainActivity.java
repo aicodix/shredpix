@@ -949,6 +949,7 @@ public class MainActivity extends AppCompatActivity {
 			configureEncoder(payload, callTerm(), 0, carrierFrequency, noiseSymbols, fancyHeader);
 			if (audioTrack.getPlayState() != AudioTrack.PLAYSTATE_PLAYING)
 				startSending();
+			return true;
 		}
 		if (id == R.id.action_encode) {
 			if (audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
@@ -958,6 +959,7 @@ public class MainActivity extends AppCompatActivity {
 				configureEncoder(payload, callTerm(), operationMode, carrierFrequency, noiseSymbols, fancyHeader);
 				startSending();
 			}
+			return true;
 		}
 		if (id == R.id.action_set_rate_8000) {
 			setSampleRate(8000);

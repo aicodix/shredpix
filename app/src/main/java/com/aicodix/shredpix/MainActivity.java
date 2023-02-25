@@ -946,7 +946,7 @@ public class MainActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if (id == R.id.action_ping) {
-			configureEncoder(payload, callTerm(), 0, carrierFrequency, noiseSymbols, fancyHeader);
+			configureEncoder(null, callTerm(), 0, carrierFrequency, noiseSymbols, fancyHeader);
 			if (audioTrack.getPlayState() != AudioTrack.PLAYSTATE_PLAYING)
 				startSending();
 			return true;

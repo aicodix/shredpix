@@ -80,10 +80,12 @@ Java_com_aicodix_shredpix_MainActivity_configureEncoder(
 	if (!encoder)
 		return;
 
-	jbyte *payload, *callSign;
-	payload = env->GetByteArrayElements(JNI_payload, nullptr);
-	if (!payload)
-		goto payloadFail;
+	jbyte *payload = nullptr, *callSign;
+	if (operationMode) {
+		payload = env->GetByteArrayElements(JNI_payload, nullptr);
+		if (!payload)
+			goto payloadFail;
+	}
 	callSign = env->GetByteArrayElements(JNI_callSign, nullptr);
 	if (!callSign)
 		goto callSignFail;
@@ -98,6 +100,7 @@ Java_com_aicodix_shredpix_MainActivity_configureEncoder(
 
 	env->ReleaseByteArrayElements(JNI_callSign, callSign, JNI_ABORT);
 	callSignFail:
-	env->ReleaseByteArrayElements(JNI_payload, payload, JNI_ABORT);
+	if (operationMode)
+		env->ReleaseByteArrayElements(JNI_payload, payload, JNI_ABORT);
 	payloadFail:;
 }

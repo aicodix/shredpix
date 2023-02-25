@@ -190,7 +190,7 @@ class Encoder : public Interface {
 	void prepare(int operation_mode) {
 		switch (operation_mode) {
 			case 0:
-				pay_car_cnt = 0;
+				pay_car_cnt = 256;
 				symbol_count = 0;
 				break;
 			case 6:

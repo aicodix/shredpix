@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 	private String imageFormat;
 	private String pixelCount;
 	private AudioTrack audioTrack;
-	private int bufferLength;
 	private short[] audioBuffer;
 	private byte[] payload;
 	private boolean doRecode;
@@ -127,11 +126,10 @@ public class MainActivity extends AppCompatActivity {
 		}
 		int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
 		int sampleSize = 2;
-		bufferLength = 2 * Integer.highestOneBit(sampleRate) * channelCount;
-		int bufferSize = sampleSize * bufferLength;
 		int symbolLength = (1280 * sampleRate) / 8000;
 		int guardLength = symbolLength / 8;
 		int extendedLength = symbolLength + guardLength;
+		int bufferSize = 5 * extendedLength * sampleSize * channelCount;
 		audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig, audioFormat, bufferSize, AudioTrack.MODE_STREAM);
 		audioBuffer = new short[extendedLength * channelCount];
 		audioTrack.setPlaybackPositionUpdateListener(audioListener);
@@ -949,21 +947,16 @@ public class MainActivity extends AppCompatActivity {
 		int id = item.getItemId();
 		if (id == R.id.action_ping) {
 			configureEncoder(payload, callTerm(), 0, carrierFrequency, noiseSymbols, fancyHeader);
-			if (audioTrack.getPlayState() != AudioTrack.PLAYSTATE_PLAYING) {
-				busySending();
-				audioTrack.write(new short[bufferLength], 0, bufferLength);
-				audioTrack.play();
-			}
+			if (audioTrack.getPlayState() != AudioTrack.PLAYSTATE_PLAYING)
+				startSending();
 		}
 		if (id == R.id.action_encode) {
 			if (audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
 				audioTrack.stop();
 				doneSending();
 			} else {
-				busySending();
 				configureEncoder(payload, callTerm(), operationMode, carrierFrequency, noiseSymbols, fancyHeader);
-				audioTrack.write(new short[bufferLength], 0, bufferLength);
-				audioTrack.play();
+				startSending();
 			}
 		}
 		if (id == R.id.action_set_rate_8000) {
@@ -1056,6 +1049,15 @@ public class MainActivity extends AppCompatActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void startSending() {
+		busySending();
+		for (int i = 0; i < 5; ++i) {
+			produceEncoder(audioBuffer, channelSelect);
+			audioTrack.write(audioBuffer, 0, audioBuffer.length);
+		}
+		audioTrack.play();
 	}
 
 	private void showTextPage(String title, String message) {

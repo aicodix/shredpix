@@ -138,11 +138,11 @@ public class MainActivity extends AppCompatActivity {
 
 	private void initEncoder() {
 		encoderOkay = createEncoder(sampleRate);
-		int icon = android.R.drawable.ic_menu_send;
+		int icon = R.drawable.outline_send_24;
 		if (!payloadOkay)
-			icon = android.R.drawable.ic_popup_disk_full;
+			icon = R.drawable.outline_disc_full_24;
 		if (!encoderOkay)
-			icon = android.R.drawable.ic_dialog_alert;
+			icon = R.drawable.outline_error_outline_24;
 		menu.findItem(R.id.action_encode).setIcon(icon);
 		menu.findItem(R.id.action_encode).setEnabled(payloadOkay && encoderOkay);
 	}
@@ -592,11 +592,11 @@ public class MainActivity extends AppCompatActivity {
 		binding.carrier.setEnabled(true);
 		binding.call.setEnabled(true);
 		updateCompressionMethodButton(false);
-		int icon = android.R.drawable.ic_menu_send;
+		int icon = R.drawable.outline_send_24;
 		if (!payloadOkay)
-			icon = android.R.drawable.ic_popup_disk_full;
+			icon = R.drawable.outline_disc_full_24;
 		if (!encoderOkay)
-			icon = android.R.drawable.ic_dialog_alert;
+			icon = R.drawable.outline_error_outline_24;
 		menu.findItem(R.id.action_encode).setIcon(icon);
 		menu.findItem(R.id.action_encode).setEnabled(payloadOkay && encoderOkay);
 	}
@@ -608,7 +608,7 @@ public class MainActivity extends AppCompatActivity {
 		binding.carrier.setEnabled(false);
 		binding.call.setEnabled(false);
 		binding.lossy.setEnabled(false);
-		menu.findItem(R.id.action_encode).setIcon(android.R.drawable.ic_popup_sync);
+		menu.findItem(R.id.action_encode).setIcon(R.drawable.outline_sync_24);
 		menu.findItem(R.id.action_encode).setEnabled(false);
 	}
 
@@ -619,7 +619,7 @@ public class MainActivity extends AppCompatActivity {
 		binding.carrier.setEnabled(false);
 		binding.call.setEnabled(false);
 		binding.lossy.setEnabled(false);
-		menu.findItem(R.id.action_encode).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+		menu.findItem(R.id.action_encode).setIcon(R.drawable.outline_cancel_24);
 	}
 
 	private void doneSending() {
@@ -631,7 +631,7 @@ public class MainActivity extends AppCompatActivity {
 			binding.carrier.setEnabled(true);
 			binding.call.setEnabled(true);
 			updateCompressionMethodButton(false);
-			menu.findItem(R.id.action_encode).setIcon(android.R.drawable.ic_menu_send);
+			menu.findItem(R.id.action_encode).setIcon(R.drawable.outline_send_24);
 			menu.findItem(R.id.action_encode).setEnabled(true);
 		}, 1000);
 	}

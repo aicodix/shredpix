@@ -10,7 +10,7 @@
 		app:showAsAction="always" />
 	<item
 		android:id="@+id/action_encode"
-		android:icon="@android:drawable/ic_menu_send"
+		android:icon="@drawable/outline_send_24"
 		android:title="@string/encode"
 		app:iconTint="@color/tint"
 		app:showAsAction="always" />

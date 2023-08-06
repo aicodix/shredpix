@@ -323,12 +323,12 @@ public class MainActivity extends AppCompatActivity {
 				if (lossyCompression) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
 						format = Bitmap.CompressFormat.WEBP_LOSSY;
-					else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+					else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q)
 						higherQuality = 99;
 				} else {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
 						format = Bitmap.CompressFormat.WEBP_LOSSLESS;
-					else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+					else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q)
 						quality = 100;
 					else
 						return null;

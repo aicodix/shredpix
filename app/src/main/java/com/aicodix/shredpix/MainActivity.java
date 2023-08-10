@@ -562,10 +562,8 @@ public class MainActivity extends AppCompatActivity {
 		bandWidth = ((bandWidth + 99) / 100) * 100;
 		maxCarrierFrequency = ultrasonicEnabled ? (sampleRate - bandWidth) / 2 : 3000;
 		minCarrierFrequency = channelSelect == 4 ? -maxCarrierFrequency : bandWidth / 2;
-		if (carrierFrequency < minCarrierFrequency)
-			carrierFrequency = minCarrierFrequency;
-		if (carrierFrequency > maxCarrierFrequency)
-			carrierFrequency = maxCarrierFrequency;
+		if (carrierFrequency < minCarrierFrequency || carrierFrequency > maxCarrierFrequency)
+			carrierFrequency = 1500;
 		binding.carrier.setDisplayedValues(null);
 		binding.carrier.setMaxValue((maxCarrierFrequency - minCarrierFrequency) / 50);
 		binding.carrier.setValue((carrierFrequency - minCarrierFrequency) / 50);

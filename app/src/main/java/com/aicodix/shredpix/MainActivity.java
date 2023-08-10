@@ -1038,8 +1038,7 @@ public class MainActivity extends AppCompatActivity {
 			return true;
 		}
 		if (id == R.id.action_force_quit) {
-			storeSettings();
-			System.exit(0);
+			forcedQuit();
 			return true;
 		}
 		if (id == R.id.action_privacy_policy) {
@@ -1051,6 +1050,18 @@ public class MainActivity extends AppCompatActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void forcedQuit() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AlertDialog);
+		builder.setTitle(R.string.force_quit)
+			.setMessage(R.string.force_quit_prompt)
+			.setPositiveButton(R.string.quit, (dialog, which) -> {
+				storeSettings();
+				System.exit(0);
+			})
+			.setNegativeButton(R.string.cancel, null)
+			.show();
 	}
 
 	private void startSending() {

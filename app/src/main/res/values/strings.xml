@@ -21,9 +21,11 @@
 	<string name="night_mode">Night Mode</string>
 	<string name="enable">Enable</string>
 	<string name="disable">Disable</string>
+	<string name="danger_zone">Danger Zone</string>
 	<string name="force_quit">Force Quit</string>
 	<string name="quit">Quit</string>
 	<string name="close">Close</string>
+	<string name="cancel">Cancel</string>
 	<string name="image_description">Image to encode</string>
 	<string name="encode">Encode</string>
 	<string name="ping">Ping</string>
@@ -58,6 +60,7 @@
 		<item>12 (QPSK, 2400 Hz, 16 s)</item>
 		<item>13 (QPSK, 1600 Hz, 24 s)</item>
 	</string-array>
+	<string name="force_quit_prompt">Are you sure you want to force quit the app?</string>
 	<string name="privacy_policy">Privacy Policy</string>
 	<string name="privacy_policy_text">Shredpix converts pictures together with your call sign to audio signals
 using an open source modem with an open specification and no encryption.

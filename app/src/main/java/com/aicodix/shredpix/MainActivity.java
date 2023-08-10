@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 	private final int payloadSize = 5380;
 	private boolean lossyCompression;
 	private boolean fancyHeader;
+	private boolean ultrasonicEnabled;
 	private int noiseSymbols;
 	private int sampleRate;
 	private int channelSelect;
@@ -559,7 +560,7 @@ public class MainActivity extends AppCompatActivity {
 				break;
 		}
 		bandWidth = ((bandWidth + 99) / 100) * 100;
-		maxCarrierFrequency = (sampleRate - bandWidth) / 2;
+		maxCarrierFrequency = ultrasonicEnabled ? (sampleRate - bandWidth) / 2 : 3000;
 		minCarrierFrequency = channelSelect == 4 ? -maxCarrierFrequency : bandWidth / 2;
 		if (carrierFrequency < minCarrierFrequency)
 			carrierFrequency = minCarrierFrequency;
@@ -718,6 +719,7 @@ public class MainActivity extends AppCompatActivity {
 			lossyCompression = state.getBoolean("lossyCompression", defaultLossyCompression);
 			fancyHeader = state.getBoolean("fancyHeader", defaultFancyHeader);
 		}
+		ultrasonicEnabled = Math.abs(carrierFrequency) > 3000;
 		super.onCreate(state);
 		binding = ActivityMainBinding.inflate(getLayoutInflater());
 		changeLayoutOrientation(getResources().getConfiguration());
@@ -1041,6 +1043,10 @@ public class MainActivity extends AppCompatActivity {
 			forcedQuit();
 			return true;
 		}
+		if (id == R.id.action_enable_ultrasonic) {
+			enableUltrasonic();
+			return true;
+		}
 		if (id == R.id.action_privacy_policy) {
 			showTextPage(getString(R.string.privacy_policy), getString(R.string.privacy_policy_text));
 			return true;
@@ -1061,6 +1067,21 @@ public class MainActivity extends AppCompatActivity {
 				System.exit(0);
 			})
 			.setNegativeButton(R.string.cancel, null)
+			.show();
+	}
+
+	private void enableUltrasonic() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AlertDialog);
+		builder.setTitle(R.string.enable_ultrasonic)
+			.setMessage(R.string.enable_ultrasonic_prompt)
+			.setPositiveButton(R.string.enable, (dialogInterface, i) -> {
+				ultrasonicEnabled = true;
+				updateCarriers();
+			})
+			.setNegativeButton(R.string.disable, (dialogInterface, i) -> {
+				ultrasonicEnabled = false;
+				updateCarriers();
+			})
 			.show();
 	}
 

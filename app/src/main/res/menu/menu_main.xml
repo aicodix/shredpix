@@ -103,6 +103,9 @@
 	<item android:title="@string/danger_zone">
 		<menu>
 			<item
+				android:id="@+id/action_enable_ultrasonic"
+				android:title="@string/enable_ultrasonic" />
+			<item
 				android:id="@+id/action_force_quit"
 				android:title="@string/force_quit" />
 		</menu>

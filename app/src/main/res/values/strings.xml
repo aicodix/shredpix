@@ -4,8 +4,8 @@
 	<string name="rate_8000">8 kHz</string>
 	<string name="rate_16000">16 kHz</string>
 	<string name="rate_32000">32 kHz</string>
-	<string name="rate_44100">44.1 kHz (read WARNING)</string>
-	<string name="rate_48000">48 kHz (read WARNING)</string>
+	<string name="rate_44100">44.1 kHz</string>
+	<string name="rate_48000">48 kHz</string>
 	<string name="channel_select">Channel Select</string>
 	<string name="channel_default">Default</string>
 	<string name="channel_first">First</string>
@@ -23,6 +23,7 @@
 	<string name="disable">Disable</string>
 	<string name="danger_zone">Danger Zone</string>
 	<string name="force_quit">Force Quit</string>
+	<string name="enable_ultrasonic">Enable Ultrasonic</string>
 	<string name="quit">Quit</string>
 	<string name="close">Close</string>
 	<string name="cancel">Cancel</string>
@@ -61,6 +62,8 @@
 		<item>13 (QPSK, 1600 Hz, 24 s)</item>
 	</string-array>
 	<string name="force_quit_prompt">Are you sure you want to force quit the app?</string>
+	<string name="enable_ultrasonic_prompt">Are you sure you want to enable transmission at ultrasonic frequencies?
+\n\nWARNING:\nThe higher sampling rates (44.1 and 48 kHz) enable carrier frequencies above 16 kHz for ultrasonic transmissions. Prolonged exposure to high pitched sounds can damage your hearing, even if you can\'t hear them.</string>
 	<string name="privacy_policy">Privacy Policy</string>
 	<string name="privacy_policy_text">Shredpix converts pictures together with your call sign to audio signals
 using an open source modem with an open specification and no encryption.
@@ -69,13 +72,12 @@ The picture is only used to create the audio signal and will not be stored.
 Your settings are stored in persistent storage and remain on your device.</string>
 	<string name="about">About Shredpix</string>
 	<string name="about_text">Shredpix %1$s\nCopyright 2021 aicodix GmbH
-\n\nPlease read WARNING and DISCLAIMER at the bottom of this page.
+\n\nPlease read DISCLAIMER at the bottom of this page.
 \n\nShredpix converts images to COFDMTV encoded audio signals and is based on open-source software:
 \n\nOFDM modem encoder and specification:\nhttps://github.com/aicodix/modem\nBSD Zero Clause License
 \n\nPolar and BCH codes:\nhttps://github.com/aicodix/code\nBSD Zero Clause License
 \n\nFast Fourier Transform:\nhttps://github.com/aicodix/dsp\nBSD Zero Clause License
 \n\nLauncher icon:\nhttp://tango.freedesktop.org/Tango_Desktop_Project\nPublic Domain
 \n\nFancy header font:\nhttp://terminus-font.sourceforge.net\nSIL Open Font License
-\n\nWARNING:\nThe higher sampling rates (44.1 and 48 kHz) enable carrier frequencies above 16 kHz for ultrasonic transmissions. Prolonged exposure to high pitched sounds can damage your hearing, even if you can\'t hear them.
 \n\nDISCLAIMER:\nTHE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</string>
 </resources>

@@ -1,0 +1,26 @@
+*Shredpix* converts images to COFDMTV encoded audio signals and is based on open-source software.
+
+COFDMTV is based on COFDM (coded orthogonal frequency-division multiplexing) technology:
+- 160 ms long OFDM symbols
+- 6.25 Hz per sub-carrier
+- 1/8 guard interval
+- differentially encoded PSK (phase-shift keying) modulation
+- systematic polar codes for forward error correction
+
+Following modes are supported:
+
+Using SPC(64800, 43072):
+Mode 6: 8PSK, 2700 Hz BW and about 10 seconds long
+Mode 7: 8PSK, 2500 Hz BW and about 11 seconds long
+Mode 8: QPSK, 2500 Hz BW and about 16 seconds long
+Mode 9: QPSK, 2250 Hz BW and about 18 seconds long
+
+Using SPC(64512, 43072):
+Mode 10: 8PSK, 3200 Hz BW and about 9 seconds long
+Mode 11: 8PSK, 2400 Hz BW and about 11 seconds long
+Mode 12: QPSK, 2400 Hz BW and about 16 seconds long
+Mode 13: QPSK, 1600 Hz BW and about 24 seconds long
+
+Payload must be smaller or equal to 5380 bytes.
+JPEG, PNG and WebP image formats are supported.
+Width and height are limited to between 16 and 1024 pixels.

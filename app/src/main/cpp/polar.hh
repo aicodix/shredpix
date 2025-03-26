@@ -12,7 +12,6 @@ Copyright 2021 Ahmet Inan <inan@aicodix.de>
 #include "bitman.hh"
 #include "complex.hh"
 #include "polar_tables.hh"
-#include "polar_helper.hh"
 #include "polar_encoder.hh"
 
 class Polar {

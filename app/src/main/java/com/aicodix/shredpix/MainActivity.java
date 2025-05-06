@@ -6,10 +6,14 @@ Copyright 2021 Ahmet Inan <inan@aicodix.de>
 
 package com.aicodix.shredpix;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -405,6 +409,15 @@ public class MainActivity extends AppCompatActivity {
 			binding.content.setOrientation(LinearLayout.HORIZONTAL);
 		else
 			binding.content.setOrientation(LinearLayout.VERTICAL);
+		handleInsets();
+	}
+
+	private void handleInsets() {
+		ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+			Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+			v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+			return insets;
+		});
 	}
 
 	private String[] carrierValues() {
@@ -719,7 +732,9 @@ public class MainActivity extends AppCompatActivity {
 		}
 		ultrasonicEnabled = Math.abs(carrierFrequency) > 3000;
 		super.onCreate(state);
+		EdgeToEdge.enable(this);
 		binding = ActivityMainBinding.inflate(getLayoutInflater());
+		setContentView(binding.getRoot());
 		changeLayoutOrientation(getResources().getConfiguration());
 
 		ArrayAdapter<CharSequence> formatAdapter = ArrayAdapter.createFromResource(this, R.array.image_types, android.R.layout.simple_spinner_item);
@@ -749,7 +764,6 @@ public class MainActivity extends AppCompatActivity {
 
 		updateCompressionMethodButton(false);
 
-		setContentView(binding.getRoot());
 		initAudioTrack();
 
 		InputStream stream = openStream(getIntent());

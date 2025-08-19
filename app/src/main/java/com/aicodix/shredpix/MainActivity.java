@@ -501,7 +501,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private final CompoundButton.OnCheckedChangeListener lossyListener = new CompoundButton.OnCheckedChangeListener() {
 		@Override
-		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		public void onCheckedChanged(@NonNull CompoundButton buttonView, boolean isChecked) {
 			lossyCompression = isChecked;
 			if (doRecode) {
 				busyRecoding();

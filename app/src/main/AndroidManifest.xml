@@ -29,6 +29,7 @@
 				<data android:mimeType="image/jpeg" />
 				<data android:mimeType="image/png" />
 				<data android:mimeType="image/webp" />
+				<data android:mimeType="image/avif" />
 			</intent-filter>
 		</activity>
 	</application>

@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
 		String type = options.outMimeType;
 		if (type == null)
 			return null;
-		if (!(type.equals("image/jpeg") || type.equals("image/png") || type.equals("image/webp")))
+		if (!(type.equals("image/jpeg") || type.equals("image/png") || type.equals("image/webp") || type.equals("image/avif")))
 			return null;
 		int minLength = 16;
 		if (Math.min(options.outWidth, options.outHeight) < minLength)

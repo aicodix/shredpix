@@ -8,6 +8,7 @@ package com.aicodix.shredpix;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -19,6 +20,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -1064,10 +1067,22 @@ public class MainActivity extends AppCompatActivity {
 			return true;
 		}
 		if (id == R.id.action_about) {
-			showTextPage(getString(R.string.about), getString(R.string.about_text, BuildConfig.VERSION_NAME));
+			showTextPage(getString(R.string.about), getString(R.string.about_text, getVersionString()));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Nullable
+	private String getVersionString() {
+		String version;
+		try {
+			PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			version = packageInfo.versionName;
+		} catch (PackageManager.NameNotFoundException ignored) {
+			version = "N/A";
+		}
+		return version;
 	}
 
 	private void forcedQuit() {

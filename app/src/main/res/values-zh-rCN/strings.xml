@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Shredpix</string>
+    <string name="sample_rate">采样率</string>
+    <string name="rate_8000">8 kHz</string>
+    <string name="rate_16000">16 kHz</string>
+    <string name="rate_32000">32 kHz</string>
+    <string name="rate_44100">44.1 kHz</string>
+    <string name="rate_48000">48 kHz</string>
+    <string name="channel_select">声道选择</string>
+    <string name="channel_default">默认</string>
+    <string name="channel_first">第一声道</string>
+    <string name="channel_second">第二声道</string>
+    <string name="channel_analytic">分析模式</string>
+    <string name="leading_noise">前导噪声</string>
+    <string name="quarter_second">0.25 秒</string>
+    <string name="half_second">0.5 秒</string>
+    <string name="one_second">1 秒</string>
+    <string name="two_seconds">2 秒</string>
+    <string name="four_seconds">4 秒</string>
+    <string name="fancy_header">装饰标题</string>
+    <string name="night_mode">夜间模式</string>
+    <string name="enable">启用</string>
+    <string name="disable">停用</string>
+    <string name="danger_zone">危险操作</string>
+    <string name="force_quit">强制退出</string>
+    <string name="enable_ultrasonic">启用超声波</string>
+    <string name="quit">退出</string>
+    <string name="close">关闭</string>
+    <string name="cancel">取消</string>
+    <string name="image_description">待编码的图像</string>
+    <string name="encode">编码并发送</string>
+    <string name="ping">Ping 测试</string>
+    <string name="carrier">载波：</string>
+    <string name="mode">模式：</string>
+    <string name="call">呼号：</string>
+    <string name="call_hint">在此输入你的呼号</string>
+    <string name="image_type">图像格式：</string>
+    <string-array name="image_types">
+        <item>JPEG</item>
+        <item>PNG</item>
+        <item>WebP</item>
+    </string-array>
+    <string name="lossy_compression">有损压缩</string>
+    <string name="image_size">图像大小：</string>
+    <string-array name="pixel_count">
+        <item>1M</item>
+        <item>512K</item>
+        <item>256K</item>
+        <item>128K</item>
+        <item>64K</item>
+        <item>32K</item>
+        <item>16K</item>
+    </string-array>
+    <string-array name="operation_modes">
+        <item>6（8PSK，2700 Hz，10 秒）</item>
+        <item>7（8PSK，2500 Hz，11 秒）</item>
+        <item>8（QPSK，2500 Hz，16 秒）</item>
+        <item>9（QPSK，2250 Hz，18 秒）</item>
+        <item>10（8PSK，3200 Hz，9 秒）</item>
+        <item>11（8PSK，2400 Hz，11 秒）</item>
+        <item>12（QPSK，2400 Hz，16 秒）</item>
+        <item>13（QPSK，1600 Hz，24 秒）</item>
+    </string-array>
+    <string name="force_quit_prompt">确定要强制退出应用吗？</string>
+    <string name="enable_ultrasonic_prompt">确定要启用超声频率发射吗？\n\n警告：\n使用较高采样率（44.1 和 48 kHz）时，载波频率可能超过 16 kHz，从而用于超声波传输。长时间暴露在高频声音中可能损伤听力，即使你听不到这些声音也一样。</string>
+    <string name="privacy_policy">隐私政策</string>
+    <string name="privacy_policy_text">Shredpix 会使用开源调制解调器，将图片与您的业余无线电呼号一起转换为音频信号。该调制解调器具有公开规范，且不提供加密。\n点击发送按钮后，应用会通过扬声器播放编码后的音频信号。\n图片仅用于生成音频信号，不会被应用保存。\n您的设置会保存在设备的持久化存储中。</string>
+    <string name="about">关于 Shredpix</string>
+    <string name="about_text">Shredpix %1$s\n版权所有 © 2021 aicodix GmbH\n\n请阅读本页面底部的免责声明。\n\nShredpix 可将图像转换为 COFDMTV 编码音频信号，基于以下开源软件：\n\nOFDM 调制解调器编码器及规范：\nhttps://github.com/aicodix/modem\nBSD Zero Clause License\n\nPolar 和 BCH 编码：\nhttps://github.com/aicodix/code\nBSD Zero Clause License\n\n快速傅里叶变换：\nhttps://github.com/aicodix/dsp\nBSD Zero Clause License\n\n应用图标：\nhttp://tango.freedesktop.org/Tango_Desktop_Project\n公有领域\n\n装饰标题字体：\nhttp://terminus-font.sourceforge.net\nSIL Open Font License\n\n免责声明：\n本软件按“原样”提供，作者不作任何明示或默示的保证，包括适销性保证。在任何情况下，作者均不对任何特殊、直接、间接或后果性损害，或因无法使用、数据丢失或利润损失而产生的任何损害承担责任，无论该等责任基于合同、过失或其他侵权行为，亦无论其是否与本软件的使用或性能有关。</string>
+</resources>

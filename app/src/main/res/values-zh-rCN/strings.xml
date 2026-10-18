@@ -11,7 +11,7 @@
     <string name="channel_default">默认</string>
     <string name="channel_first">第一声道</string>
     <string name="channel_second">第二声道</string>
-    <string name="channel_analytic">分析模式</string>
+    <string name="channel_analytic">解析信号模式</string>
     <string name="leading_noise">前导噪声</string>
     <string name="quarter_second">0.25 秒</string>
     <string name="half_second">0.5 秒</string>
@@ -29,7 +29,7 @@
     <string name="close">关闭</string>
     <string name="cancel">取消</string>
     <string name="image_description">待编码的图像</string>
-    <string name="encode">编码并发送</string>
+    <string name="encode">编码/发送</string>
     <string name="ping">Ping 测试</string>
     <string name="carrier">载波：</string>
     <string name="mode">模式：</string>

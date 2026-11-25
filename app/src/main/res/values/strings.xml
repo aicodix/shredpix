@@ -1,11 +1,11 @@
 <resources>
-	<string name="app_name">Shredpix</string>
+	<string name="app_name" translatable="false">Shredpix</string>
 	<string name="sample_rate">Sample Rate</string>
-	<string name="rate_8000">8 kHz</string>
-	<string name="rate_16000">16 kHz</string>
-	<string name="rate_32000">32 kHz</string>
-	<string name="rate_44100">44.1 kHz</string>
-	<string name="rate_48000">48 kHz</string>
+	<string name="rate_8000" translatable="false">8 kHz</string>
+	<string name="rate_16000" translatable="false">16 kHz</string>
+	<string name="rate_32000" translatable="false">32 kHz</string>
+	<string name="rate_44100" translatable="false">44.1 kHz</string>
+	<string name="rate_48000" translatable="false">48 kHz</string>
 	<string name="channel_select">Channel Select</string>
 	<string name="channel_default">Default</string>
 	<string name="channel_first">First</string>
@@ -29,20 +29,20 @@
 	<string name="cancel">Cancel</string>
 	<string name="image_description">Image to encode</string>
 	<string name="encode">Encode</string>
-	<string name="ping">Ping</string>
+	<string name="ping" translatable="false">Ping</string>
 	<string name="carrier">Carrier:</string>
 	<string name="mode">Mode:</string>
 	<string name="call">Call:</string>
 	<string name="call_hint">Your call sign here</string>
 	<string name="image_type">Type:</string>
-	<string-array name="image_types">
+	<string-array name="image_types" translatable="false">
 		<item>JPEG</item>
 		<item>PNG</item>
 		<item>WebP</item>
 	</string-array>
 	<string name="lossy_compression">Lossy Compression</string>
 	<string name="image_size">Size:</string>
-	<string-array name="pixel_count">
+	<string-array name="pixel_count" translatable="false">
 		<item>1M</item>
 		<item>512K</item>
 		<item>256K</item>
@@ -51,7 +51,7 @@
 		<item>32K</item>
 		<item>16K</item>
 	</string-array>
-	<string-array name="operation_modes">
+	<string-array name="operation_modes" translatable="false">
 		<item>6 (8PSK, 2700 Hz, 10 s)</item>
 		<item>7 (8PSK, 2500 Hz, 11 s)</item>
 		<item>8 (QPSK, 2500 Hz, 16 s)</item>
@@ -71,7 +71,7 @@ Pressing the send button will play the encoded audio signal over the speakers.
 The picture is only used to create the audio signal and will not be stored.
 Your settings are stored in persistent storage and remain on your device.</string>
 	<string name="about">About Shredpix</string>
-	<string name="about_text">Shredpix %1$s\nCopyright 2021 aicodix GmbH
+	<string name="about_text" translatable="false">Shredpix %1$s\nCopyright 2021 aicodix GmbH
 \n\nPlease read DISCLAIMER at the bottom of this page.
 \n\nShredpix converts images to COFDMTV encoded audio signals and is based on open-source software:
 \n\nOFDM modem encoder and specification:\nhttps://github.com/aicodix/modem\nBSD Zero Clause License

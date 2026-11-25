@@ -1,0 +1,43 @@
+<resources>
+	<string name="sample_rate">Częstotliwość próbkowania</string>
+	<string name="channel_select">Wybór kanału</string>
+	<string name="channel_default">Domyślny</string>
+	<string name="channel_first">Pierwszy</string>
+	<string name="channel_second">Drugi</string>
+	<string name="channel_analytic">Analiza</string>
+	<string name="leading_noise">Szum wstępny</string>
+	<string name="quarter_second">Ćwierć sekundy</string>
+	<string name="half_second">Pół sekundy</string>
+	<string name="one_second">Jedna sekunda</string>
+	<string name="two_seconds">Dwie sekundy</string>
+	<string name="four_seconds">Cztery sekundy</string>
+	<string name="fancy_header">Rozbudowany nagłówek</string>
+	<string name="night_mode">Tryb nocny</string>
+	<string name="enable">Włącz</string>
+	<string name="disable">Wyłącz</string>
+	<string name="danger_zone">Strefa zagrożenia</string>
+	<string name="force_quit">Wymuś zamknięcie</string>
+	<string name="enable_ultrasonic">Włącz ultradźwięki</string>
+	<string name="quit">Wyjdź</string>
+	<string name="close">Zamknij</string>
+	<string name="cancel">Anuluj</string>
+	<string name="image_description">Obraz do zakodowania</string>
+	<string name="encode">Koduj</string>
+	<string name="carrier">Nośna:</string>
+	<string name="mode">Tryb:</string>
+	<string name="call">Znak:</string>
+	<string name="call_hint">Twój znak wywoławczy</string>
+	<string name="image_type">Typ:</string>
+	<string name="lossy_compression">Kompresja stratna</string>
+	<string name="image_size">Rozmiar:</string>
+	<string name="force_quit_prompt">Czy na pewno wymusić zamknięcie aplikacji?</string>
+	<string name="enable_ultrasonic_prompt">Czy na pewno włączyć nadawanie na częstotliwościach ultradźwiękowych?
+\n\nOSTRZEŻENIE:\nWyższe częstotliwości próbkowania (44,1 i 48 kHz) umożliwiają stosowanie częstotliwości nośnych powyżej 16 kHz do transmisji ultradźwiękowych. Długotrwałe narażenie na dźwięki o wysokim tonie może uszkodzić słuch, nawet jeśli ich nie słyszysz.</string>
+	<string name="privacy_policy">Polityka prywatności</string>
+	<string name="privacy_policy_text">Shredpix zamienia obrazy wraz z Twoim znakiem wywoławczym na sygnały
+dźwiękowe za pomocą modemu open source o otwartej specyfikacji i bez szyfrowania.
+Naciśnięcie przycisku nadawania odtworzy zakodowany sygnał dźwiękowy przez głośniki.
+Obraz służy wyłącznie do utworzenia sygnału dźwiękowego i nie jest zapisywany.
+Twoje ustawienia są przechowywane w pamięci trwałej i pozostają na urządzeniu.</string>
+	<string name="about">O Shredpix</string>
+</resources>
